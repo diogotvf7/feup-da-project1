@@ -1,3 +1,1 @@
-"C:\Program Files\JetBrains\CLion 2022.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\feup_da_project.dir/objects.a
-C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\ar.exe qc CMakeFiles\feup_da_project.dir/objects.a @CMakeFiles\feup_da_project.dir\objects1.rsp
-C:\PROGRA~1\JETBRA~1\CLION2~1.3\bin\mingw\bin\G__~1.EXE -g -Wl,--whole-archive CMakeFiles\feup_da_project.dir/objects.a -Wl,--no-whole-archive -o feup_da_project.exe -Wl,--out-implib,libfeup_da_project.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\feup_da_project.dir\linklibs.rsp
+/usr/bin/c++ -g CMakeFiles/feup_da_project.dir/source/main.cpp.o CMakeFiles/feup_da_project.dir/source/FileReader.cpp.o CMakeFiles/feup_da_project.dir/source/Segment.cpp.o CMakeFiles/feup_da_project.dir/source/Station.cpp.o CMakeFiles/feup_da_project.dir/source/Graph.cpp.o -o feup_da_project 

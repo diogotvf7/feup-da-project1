@@ -10,12 +10,17 @@
 #include <sstream>
 #include <fstream>
 #include "headers/Segment.h"
+#include "Graph.h"
 
-class fileReader{
+class FileReader {
+    std::string path;
+    Graph *graph;
 
-    public:
-        std::vector<Station*> readStations(std::istream &stationsFile);
-        void readNetworks(std::string inputFile);
+public:
+    FileReader(const std::string &path, Graph *graph);
+    std::vector<Station*> readStations();
+    void readNetworks();
+    std::string strip(const std::string &str) const;
 };
 
 #endif //PROJECT_FILEREADER_H

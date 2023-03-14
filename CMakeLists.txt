@@ -3,14 +3,17 @@ project(feup_da_project)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(feup_da_project
+include_directories(.)
+
+add_executable(
+        feup_da_project
+        source/main.cpp
         dataset/network.csv
         dataset/stations.csv
-        headers/fileReader.h
+        headers/FileReader.h
+        source/FileReader.cpp
         headers/Segment.h
-        headers/Station.h
-        source/fileReader.cpp
         source/Segment.cpp
-        source/main.cpp
+        headers/Station.h
         source/Station.cpp
-        )
+        headers/Graph.h source/Graph.cpp)

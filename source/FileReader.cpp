@@ -12,19 +12,17 @@ FileReader::FileReader(const string &path, Graph *graph) {
     this->graph = graph;
 }
 
-bool FileReader::isAlphabetical(char c) {
-    return (65 <= c && c <= 90) || (97 <= c && c <= 122) || ((int) c == 156) || ((int) c == 157) || ((int) c == 158) ||
-            (192 <= (int) c && (int) c <= 214) || (216 <= (int) c && (int) c <= 246) ||
-           (248 <= (int) c && (int) c <= 255);
+bool FileReader::discard(char c) {
+    return c == ' ' || c == '"';
 }
 
 string FileReader::strip(const string &str) const {
     if (str.empty()) return "";
     string buffer;
     auto lowerBound = str.begin(), upperBound = str.end();
-    while (!isAlphabetical(*lowerBound)) lowerBound++;
-    while (!isAlphabetical(*upperBound)) upperBound--;
-    return {lowerBound, ++upperBound};
+    while (discard(*lowerBound)) lowerBound++;
+    while (discard(*upperBound)) upperBound--;
+    return {lowerBound, upperBound};
 }
 
 void FileReader::readStations() {

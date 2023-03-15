@@ -17,7 +17,7 @@ class FileReader {
 
 public:
     FileReader(const std::string &path, Graph *graph);
-    static bool isAlphabetical(char c) ;
+    static bool discard(char c) ;
     void readStations();
     [[nodiscard]] std::string strip(const std::string &str) const;
     void readNetworks();

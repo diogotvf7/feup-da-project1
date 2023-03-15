@@ -1,17 +1,21 @@
 #include <string>
-#include <fstream>
+#include <iomanip>
 #include "iostream"
+
+#include "headers/Graph.h"
 #include "headers/FileReader.h"
 
-int main(){
-    Graph *g;
-    FileReader fr("../dataset", g);
-    std::string test = fr.strip("   ..-.-.. asdasdasdasda  .-. . --.. ");
-    std::cout << test << std::endl;
-    /*std::vector<Station*> stations = fr.readStations();
-    for (Station *station : stations)
-        std::cout << station->getName() << '_' << station->getDistrict() << '_' << station->getMunicipality()
-        << '_' << station->getTownship() << '_' << station->getLine() << std::endl;*/
+using namespace std;
+
+int main() {
+    Graph *g = new Graph();
+    string path = "dataset/";
+    FileReader fr = FileReader(path, g);
+
+    fr.readStations();
+    fr.readNetworks();
+
+    cout << "Hello World!" << endl;
 
     return 0;
 }

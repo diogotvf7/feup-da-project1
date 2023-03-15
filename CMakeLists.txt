@@ -16,4 +16,5 @@ add_executable(
         source/Segment.cpp
         headers/Station.h
         source/Station.cpp
-        headers/Graph.h source/Graph.cpp)
+        headers/Graph.h
+        source/Graph.cpp)

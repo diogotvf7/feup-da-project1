@@ -2,15 +2,14 @@
 #define PROJECT_FILEREADER_H
 
 #include <iostream>
-#include "Station.h"
-#include <limits>
 #include <string>
-#include <limits>
 #include <vector>
 #include <sstream>
 #include <fstream>
-#include "headers/Segment.h"
+
 #include "Graph.h"
+#include "Segment.h"
+#include "Station.h"
 
 class FileReader {
     std::string path;
@@ -18,9 +17,10 @@ class FileReader {
 
 public:
     FileReader(const std::string &path, Graph *graph);
-    std::vector<Station*> readStations();
+    static bool isAlphabetical(char c) ;
+    void readStations();
+    [[nodiscard]] std::string strip(const std::string &str) const;
     void readNetworks();
-    std::string strip(const std::string &str) const;
 };
 
 #endif //PROJECT_FILEREADER_H

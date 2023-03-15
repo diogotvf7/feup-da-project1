@@ -4,26 +4,26 @@
 
 #include "headers/Segment.h"
 
-Segment::Segment(std::string src, std::string dest, int capacity, std::string service) {
+Segment::Segment(Station *src, Station *dest, int capacity, const std::string &service) {
     this->src = src;
     this->dest = dest;
     this->capacity = capacity;
     this->service = service;
 }
 
-std::string Segment::getSource() const {
+Station *Segment::getSource() const {
     return src;
 }
 
-void Segment::setSource(const std::string &source) {
+void Segment::setSource(Station *source) {
     this->src = source;
 }
 
-std::string Segment::getDestination() const {
+Station *Segment::getDestination() const {
     return dest;
 }
 
-void Segment::setDestination(const std::string &destination) {
+void Segment::setDestination(Station *destination) {
     this->dest = destination;
 }
 
@@ -39,6 +39,7 @@ std::string Segment::getService() const {
     return service;
 }
 
-void Segment::setService(const std::string &s) {
-    this->service = s;
+void Segment::setService(const std::string &service) {
+    this->service = service;
 }
+

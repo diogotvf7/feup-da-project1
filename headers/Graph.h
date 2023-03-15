@@ -5,6 +5,7 @@
 #ifndef FEUP_DA_PROJECT_GRAPH_H
 #define FEUP_DA_PROJECT_GRAPH_H
 
+#include <algorithm>
 #include <vector>
 
 #include "Segment.h"
@@ -12,12 +13,14 @@
 
 class Graph {
     std::vector<Station*> stations;
-    std::vector<Segment*> segments;
 
 public:
     Graph();
-    void addStation(Station *st);
-    void addSegment(Segment *s);
+    [[nodiscard]] Station *findStation(const std::string &name) const;
+    void addStation(Station *station);
+    void addSegment(const std::string &src, const std::string &dest, int capacity, const std::string &service);
+    void addBidirectionalSegment(const std::string &src, const std::string &dest, int capacity, const std::string &service);
+    [[nodiscard]] std::vector<Station*> getStationsVector() const;
 };
 
 

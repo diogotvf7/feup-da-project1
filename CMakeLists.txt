@@ -3,6 +3,8 @@ project(feup_da_project)
 
 set(CMAKE_CXX_STANDARD 17)
 
+INCLUDE_DIRECTORIES(.)
+
 add_executable(feup_da_project
         dataset/network.csv
         dataset/stations.csv

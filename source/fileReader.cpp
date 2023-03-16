@@ -63,9 +63,7 @@ void readNetworks(std::string inputFile){
 
     while(networkFile.good()) {
 
-        string line, data, src, dest, capacity, service;
-
-        int n;
+        string line, src, dest, capacity, service;
 
         getline(networkFile, line);
 
@@ -73,25 +71,15 @@ void readNetworks(std::string inputFile){
 
         stringstream ss(line);
 
-        getline(ss, data, ',');
+        getline(ss, src, ',');
 
-        src = data;
+        getline(ss, dest, ',');
 
-        getline(ss, data, ',');
+        getline(ss, capacity, ',');
 
-        dest = data;
+        getline(ss, service, ',');
 
-        getline(ss, data, ',');
-
-        capacity = data;
-
-        n = stoi(capacity);
-
-        getline(ss, data, ',');
-
-        service = data;
-
-        Segment *seg = new Segment(src,dest,n,service);
+        Segment *seg = new Segment(src,dest,stoi(capacity),service);
 
         segments.push_back(seg);
     }

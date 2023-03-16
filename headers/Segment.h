@@ -8,23 +8,27 @@
 #include <iostream>
 #include <string>
 
+class Station;
+
+#include "Station.h"
+
 class Segment {
-private:
-    std::string src;
-    std::string dest;
+    Station *src;
+    Station *dest;
     int capacity;
     std::string service;
 public:
-    Segment(std::string src, std::string dest, int capacity, std::string service);
-    std::string getSource() const;
-    std::string getDestination() const;
-    int getCapacity() const;
-    std::string getService() const;
+    Segment(Station *src, Station *dest, int capacity, const std::string &service);
+    [[nodiscard]] Station *getSource() const;
+    [[nodiscard]] Station *getDestination() const;
+    [[nodiscard]] int getCapacity() const;
 
-    void setSource(const std::string &source);
-    void setDestination(const std::string &destination);
+    [[nodiscard]] std::string getService() const;
+    void setSource(Station *source);
+    void setDestination(Station *destination);
     void setCapacity(int capacity);
-    void setService(const std::string &s);
+
+    void setService(const std::string &service);
 };
 
 

@@ -4,7 +4,9 @@
 
 #include "headers/Station.h"
 
-Station::Station(std::string name, std::string district, std::string municipality, std::string township, std::string line) {
+using namespace std;
+
+Station::Station(string name, string district, string municipality, string township, string line) {
     this->name = name;
     this->district = district;
     this->municipality = municipality;
@@ -12,22 +14,46 @@ Station::Station(std::string name, std::string district, std::string municipalit
     this->line = line;
 }
 
-std::string Station::getName() {return name;}
+string Station::getName() {
+    return name;
+}
 
-std::string Station::getDistrict() {return district;}
+string Station::getDistrict() {
+    return district;
+}
 
-std::string Station::getMunicipality() {return municipality;}
+string Station::getMunicipality() {
+    return municipality;
+}
 
-std::string Station::getTownship() {return township;}
+string Station::getTownship() {
+    return township;
+}
 
-std::string Station::getLine() {return line;}
+string Station::getLine() {
+    return line;
+}
 
-void Station::setName(std::string n) {this->name = n;}
+void Station::setName(const string &name) {
+    this->name = name;
+}
 
-void Station::setDistrict(std::string d) {this->district = d;}
+void Station::setDistrict(const string &district) {
+    this->district = district;
+}
 
-void Station::setMunicipality(std::string m) {this->municipality = m;}
+void Station::setMunicipality(const string &municipality) {
+    this->municipality = municipality;
+}
 
-void Station::setTownship(std::string t) {this->township = t;}
+void Station::setTownship(const string &township) {
+    this->township = township;
+}
 
-void Station::setLine(std::string l) {this->line = l;}
+void Station::setLine(const string &line) {
+    this->line = line;
+}
+
+void Station::addSegment(Station *dest, int capacity, const string &service) {
+    segments.push_back(new Segment(this, dest, capacity, service));
+}

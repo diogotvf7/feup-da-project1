@@ -2,13 +2,13 @@
 #include <iomanip>
 #include "iostream"
 
-#include "headers/Graph.h"
+#include "headers/Network.h"
 #include "headers/FileReader.h"
 
 using namespace std;
 
 int main() {
-    Graph *g = new Graph();
+    Network *g = new Network();
     string path = "dataset/";
     FileReader fr = FileReader(path, g);
 
@@ -17,7 +17,8 @@ int main() {
 
     cout << "Hello World!" << endl;
 
-    for (Station *station : g->getStationsVector()) {
+    /*
+    for (StationTrack *station : g->getStationsVector()) {
         cout << left << "|--|" << setw(30) << station->getName() << "|--|" << setw(30) << station->getDistrict() << "|--|"
                 << setw(30) << station->getMunicipality() << "|--|" << setw(40) << station->getTownship() << "|--|"
                 << setw(20) << station->getLine() << "|--|" << endl;
@@ -25,9 +26,9 @@ int main() {
                 "-----------------------------------------------------------------------------------" << endl;
     }
 
-    for (Station *station : g->getStationsVector()) {
+    for (StationTrack *station : g->getStationsVector()) {
         break;
     }
-
+     */
     return 0;
 }

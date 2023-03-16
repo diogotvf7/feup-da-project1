@@ -7,16 +7,15 @@
 #include <sstream>
 #include <fstream>
 
-#include "Graph.h"
-#include "Segment.h"
-#include "Station.h"
+#include "Network.h"
+#include "StationTrack.h"
 
 class FileReader {
     std::string path;
-    Graph *graph;
+    Network *graph;
 
 public:
-    FileReader(const std::string &path, Graph *graph);
+    FileReader(const std::string &path, Network *graph);
     static bool discard(char c) ;
     void readStations();
     [[nodiscard]] std::string strip(const std::string &str) const;

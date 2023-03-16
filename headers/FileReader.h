@@ -20,6 +20,7 @@ public:
     static bool discard(char c) ;
     void readStations();
     [[nodiscard]] std::string strip(const std::string &str) const;
+    std::string capitalizeFirstLetter(const std::string& str);
     void readNetworks();
 };
 

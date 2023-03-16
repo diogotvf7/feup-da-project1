@@ -35,6 +35,10 @@ void Segment::setCapacity(int c) {
     this->capacity = c;
 }
 
+void Segment::setReverse(Segment *reverse) {
+    this->reverse = reverse;
+}
+
 std::string Segment::getService() const {
     return service;
 }

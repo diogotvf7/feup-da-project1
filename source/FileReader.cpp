@@ -49,7 +49,8 @@ void FileReader::readStations() {
         getline(tmp, line, ',');
         getline(tmp, line, '\n');
 
-        graph->addStation(new Station(strip(name), strip(district), strip(municipality), strip(township), strip(line)));
+        graph->addStation(new Station(strip(name), capitalizeFirstLetter(strip(district)), capitalizeFirstLetter(strip(municipality)), strip(township),
+                                      capitalizeFirstLetter(strip(line))));
     }
 }
 
@@ -68,7 +69,20 @@ void FileReader::readNetworks() {
         getline(tmp, capacity, ',');
         getline(tmp, service, '\n');
 
-        graph->addBidirectionalSegment(strip(src), strip(dest), stoi(capacity), strip(service));
+        graph->addBidirectionalSegment(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
     }
 }
+
+std::string FileReader::capitalizeFirstLetter(const std::string& str)
+{
+    std::string result = str;
+    if (!result.empty()) {
+        result[0] = std::toupper(result[0]);
+        for (std::size_t i = 1; i < result.size(); ++i) {
+            result[i] = std::tolower(result[i]);
+        }
+    }
+    return result;
+}
+
 

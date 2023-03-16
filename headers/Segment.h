@@ -17,6 +17,7 @@ class Segment {
     Station *dest;
     int capacity;
     std::string service;
+    Segment* reverse = nullptr;
 public:
     Segment(Station *src, Station *dest, int capacity, const std::string &service);
     [[nodiscard]] Station *getSource() const;
@@ -29,6 +30,7 @@ public:
     void setCapacity(int capacity);
 
     void setService(const std::string &service);
+    void setReverse(Segment* reverse);
 };
 
 

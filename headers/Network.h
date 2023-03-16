@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <vector>
+#include <queue>
 
 #include "StationTrack.h"
 
@@ -16,6 +17,13 @@ public:
     int getNumStations() const;
     std::vector<Track*> getTracksSet() const;
     std::vector<Station*> getStationsSet() const;
+
+    /*EdmondsKarp algorithm and its auxiliary functions*/
+    void edmondsKarp(std::string source, std::string dest);
+    bool findAugmentingPath(Station* source, Station* dest);
+    void testAndVisit(std::queue<Station*> &q, Track *t, Station* s, double residual);
+    double findMinResidualAlongPath(Station* source, Station* dest);
+    void augmentFlowAlongPath(Station* source, Station* dest, double f);
 
 };
 

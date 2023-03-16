@@ -47,3 +47,90 @@ vector<Track*> Network::getTracksSet() const {
     }
     return tracksSet;
 }
+
+
+void Network::testAndVisit(std::queue<Station *> &q, Track *t, Station *s, double residual) {
+    if(!s->isVisited() && residual > 0){
+        s->setVisited(true);
+        s->setPath(t);
+        q.push(s);
+    }
+}
+
+bool Network::findAugmentingPath(Station *source, Station *dest) {
+    for(Station* station : stationsSet){
+        if(station->getName() != source->getName())
+            station->setVisited(false);
+        else
+            station->setVisited(true);
+    }
+
+    queue<Station*> q;
+    q.push(source);
+
+    while(!q.empty() && !(dest->isVisited())){
+        Station* v = q.front();
+        q.pop();
+        for(Track* t : v->getAdj()){
+            testAndVisit(q, t, t->getDestination(),  t->getCapacity() - t->getFlow());
+        }
+
+        for(Track* t : v->getIncoming()){
+            testAndVisit(q, t, t->getSource(), t->getFlow());
+        }
+    }
+    return dest->isVisited();
+}
+
+double Network::findMinResidualAlongPath(Station *source, Station *dest) {
+    double f = INT16_MAX;
+    for (auto v = dest; v != source; ) {
+        auto e = v->getPath();
+        if (e->getDestination() == v) {
+            f = std::min(f, e->getCapacity() - e->getFlow());
+            v = e->getSource();
+        }
+        else {
+            f = std::min(f, e->getFlow());
+            v = e->getDestination();
+        }
+    }
+    return f;
+}
+
+void Network::augmentFlowAlongPath(Station *source, Station *dest, double f) {
+    for (auto v = source; v != dest; ) {
+        auto e = v->getPath();
+        double flow = e->getFlow();
+        if (e->getDestination() == v) {
+            e->setFlow(flow + f);
+            v = e->getSource();
+        }
+        else {
+            e->setFlow(flow - f);
+            v = e->getDestination();
+        }
+    }
+}
+
+void Network::edmondsKarp(std::string source, std::string dest) {
+
+    Station *stationSource = findStation(source);
+    Station *stationDest = findStation(dest);
+
+    if (stationSource == nullptr || stationDest != nullptr || stationSource == stationDest) {
+        throw std::logic_error("Invalid source and/or target vertex");
+    }
+
+    for (Station *station: stationsSet) {
+        for (Track *track: station->getAdj()) {
+            track->setFlow(0);
+        }
+    }
+
+    while (findAugmentingPath(stationSource, stationDest)) {
+        double f = findMinResidualAlongPath(stationSource, stationDest);
+        augmentFlowAlongPath(stationSource, stationDest, f);
+    }
+
+}

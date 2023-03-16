@@ -18,7 +18,4 @@ add_executable(
         source/StationTrack.cpp
         headers/Network.h
         source/Network.cpp
-        data_structures/Graph.cpp
-        data_structures/VertexEdge.cpp
-        data_structures/Heap.cpp
-        data_structures/UFDS.cpp)
+)

@@ -18,6 +18,15 @@ bool Network::addStation(Station* station) {
     return false;
 }
 
+bool Network::addTrack(const string &sourc, const string &dest, double capacity, const std::string &service) {
+    auto v1 = findStation(sourc);
+    auto v2 = findStation(dest);
+    if (v1 == nullptr || v2 == nullptr)
+        return false;
+    v1->addTrack(v2, capacity, service);
+    return true;
+}
+
 bool Network::addBidirectionalTrack(const string &source,const string &dest, double capacity, const std::string &service) {
 
     Station* s1 = findStation(source);
@@ -62,7 +71,7 @@ bool Network::findAugmentingPath(Station *source, Station *dest) {
         if(station->getName() != source->getName())
             station->setVisited(false);
         else
-            station->setVisited(true);
+            station->setVisited(true);  \
     }
 
     queue<Station*> q;
@@ -99,7 +108,7 @@ double Network::findMinResidualAlongPath(Station *source, Station *dest) {
 }
 
 void Network::augmentFlowAlongPath(Station *source, Station *dest, double f) {
-    for (auto v = source; v != dest; ) {
+    for (auto v = dest; v != source; ) {
         auto e = v->getPath();
         double flow = e->getFlow();
         if (e->getDestination() == v) {
@@ -118,7 +127,7 @@ void Network::edmondsKarp(std::string source, std::string dest) {
     Station *stationSource = findStation(source);
     Station *stationDest = findStation(dest);
 
-    if (stationSource == nullptr || stationDest != nullptr || stationSource == stationDest) {
+    if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest) {
         throw std::logic_error("Invalid source and/or target vertex");
     }
 

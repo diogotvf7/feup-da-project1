@@ -12,7 +12,7 @@ class Network {
 public:
     Station* findStation(std::string stationName) const;
     bool addStation(Station* station);
-    //bool addTrack(const int &sourc, const int &dest, double w);
+    bool addTrack(const std::string &sourc, const std::string &dest, double capacity,const std::string &service);
     bool addBidirectionalTrack(const std::string &source,const std::string &dest, double capacity, const std::string &service);
     int getNumStations() const;
     std::vector<Track*> getTracksSet() const;

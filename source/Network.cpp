@@ -175,69 +175,51 @@ struct{
 
 vector<pair<string, double>> Network::topTransportationNeeds(string location){
 
-   vector<pair<string, double>> res;
+    vector<pair<string, double>> res;
 
-   for(Station* station : stationsSet){
-       if(location == "district"){
-           auto itr = std::find_if(res.begin(), res.end(), [&](const auto& p) {
-               return p.first == station->getDistrict();
-           });
-
-           if((itr == res.end() || res.empty()) && station->getDistrict() != "")
-               res.push_back(make_pair(station->getDistrict(), 0));
-       }
-       else if(location == "municipality"){
-           auto itr = std::find_if(res.begin(), res.end(), [&](const auto& p) {
-               return p.first == station->getMunicipality();
-           });
-
-           if((itr == res.end() || res.empty()) && station->getMunicipality() != "")
-               res.push_back(make_pair(station->getMunicipality(), 0));
-       }
-   }
-
-
-    for (Station *src : stationsSet) {
-        if(location == "district"){
-            for (Station *dest : stationsSet) {
-                if (src == dest) continue;
-                edmondsKarp(src->getName(), dest->getName());
-                double flow = dest->getFlow();
-
-                auto itrSource = std::find_if(res.begin(), res.end(), [&](const auto& p) {
-                    return p.first == src->getDistrict();
-                });
-                itrSource->second += flow;
-
-                auto itrDest = std::find_if(res.begin(), res.end(), [&](const auto& p) {
-                    return p.first == dest->getDistrict();
-                });
-                itrDest->second += flow;
-
-            }
+    auto getLocationString = [&](Station* station) {
+        if (location == "district") {
+            return station->getDistrict();
+        } else if (location == "municipality") {
+            return station->getMunicipality();
         }
-        else if(location == "municipality"){
-            for (Station *dest : stationsSet) {
-                if (src == dest) continue;
-                edmondsKarp(src->getName(), dest->getName());
-                double flow = dest->getFlow();
+        return string("");
+    };
 
-                auto itrSource = std::find_if(res.begin(), res.end(), [&](const auto& p) {
-                    return p.first == src->getMunicipality();
-                });
-                itrSource->second += flow;
+    for (Station* station : stationsSet) {
+        string locStr = getLocationString(station);
+        auto itr = std::find_if(res.begin(), res.end(), [&](const auto& p) {
+            return p.first == locStr;
+        });
 
-                auto itrDest = std::find_if(res.begin(), res.end(), [&](const auto& p) {
-                    return p.first == dest->getMunicipality();
-                });
-                itrDest->second += flow;
-            }
+        if ((itr == res.end() || res.empty()) && !locStr.empty()) {
+            res.push_back(make_pair(locStr, 0));
+        }
+    }
+
+    for (Station* src : stationsSet) {
+        string srcLocStr = getLocationString(src);
+        for (Station* dest : stationsSet) {
+            if (src == dest) continue;
+            edmondsKarp(src->getName(), dest->getName());
+            double flow = dest->getFlow();
+
+            auto itrSource = std::find_if(res.begin(), res.end(), [&](const auto& p) {
+                return p.first == srcLocStr;
+            });
+            itrSource->second += flow;
+
+            string destLocStr = getLocationString(dest);
+            auto itrDest = std::find_if(res.begin(), res.end(), [&](const auto& p) {
+                return p.first == destLocStr;
+            });
+            itrDest->second += flow;
         }
     }
 
     sort(res.begin(), res.end(), customComparator);
-
     return res;
+
 }
 
 

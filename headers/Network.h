@@ -24,7 +24,6 @@ public:
     void testAndVisit(std::queue<Station*> &q, Track *t, Station* s, double residual);
     double findMinResidualAlongPath(Station* source, Station* dest);
     void augmentFlowAlongPath(Station* source, Station* dest, double f);
-
 };
 
 

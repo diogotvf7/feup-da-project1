@@ -30,6 +30,8 @@ int main() {
         break;
     }
      */
+     
     g->edmondsKarp("Porto Campanhã", "Pinhal Novo");
+    
     return 0;
 }

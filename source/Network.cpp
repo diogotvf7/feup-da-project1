@@ -55,6 +55,7 @@ vector<Track*> Network::getTracksSet() const {
         }
     }
     return tracksSet;
+    
 }
 
 
@@ -141,5 +142,4 @@ void Network::edmondsKarp(std::string source, std::string dest) {
         double f = findMinResidualAlongPath(stationSource, stationDest);
         augmentFlowAlongPath(stationSource, stationDest, f);
     }
-
 }

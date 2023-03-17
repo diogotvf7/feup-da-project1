@@ -28,7 +28,7 @@ string FileReader::strip(const string &str) const {
 void FileReader::readStations() {
 
     int id = 0;
-    ifstream csv("../dataset/stationsTest.csv");
+    ifstream csv("path + /stations.csv");
     string buffer;
     getline(csv, buffer, '\n'); // Ignore Header
 
@@ -57,7 +57,7 @@ void FileReader::readStations() {
 
 void FileReader::readNetworks() {
 
-    ifstream csv("../dataset/networkTest.csv");
+    ifstream csv(path + "/network.csv");
     string buffer;
     getline(csv, buffer, '\n'); // Ignore Header
 

@@ -169,7 +169,7 @@ pair<double,vector<pair<Station*,Station*>>> Network::topMaxFlow() {
 
 struct{
         bool operator() (const pair<string, double>& pair1, const pair<string, double>& pair2){
-            return (pair1.second < pair2.second);
+            return (pair1.second > pair2.second);
         }
 }customComparator;
 

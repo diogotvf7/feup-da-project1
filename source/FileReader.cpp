@@ -7,7 +7,7 @@
 using namespace std;
 
 
-FileReader::FileReader(const string &path, Graph *graph) {
+FileReader::FileReader(const string &path, Network *graph) {
     this->path = path;
     this->graph = graph;
 }
@@ -27,6 +27,7 @@ string FileReader::strip(const string &str) const {
 
 void FileReader::readStations() {
 
+    int id = 0;
     ifstream csv("../dataset/stations.csv");
     string buffer;
     getline(csv, buffer, '\n'); // Ignore Header
@@ -50,7 +51,7 @@ void FileReader::readStations() {
         getline(tmp, line, '\n');
 
         graph->addStation(new Station(strip(name), capitalizeFirstLetter(strip(district)), capitalizeFirstLetter(strip(municipality)), strip(township),
-                                      capitalizeFirstLetter(strip(line))));
+                                           capitalizeFirstLetter(strip(line))));
     }
 }
 
@@ -69,7 +70,7 @@ void FileReader::readNetworks() {
         getline(tmp, capacity, ',');
         getline(tmp, service, '\n');
 
-        graph->addBidirectionalSegment(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
+        graph->addBidirectionalTrack(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
     }
 }
 

@@ -70,30 +70,6 @@ std::vector<Track *> Station::getIncoming() const {
     return incoming;
 }
 
-void Station::setName(const string &name) {
-    this->name = name;
-}
-
-void Station::setDistrict(const string &district) {
-    this->district = district;
-}
-
-void Station::setMunicipality(const string &municipality) {
-    this->municipality = municipality;
-}
-
-void Station::setTownship(const string &township) {
-    this->township = township;
-}
-
-void Station::setLine(const string &line) {
-    this->line = line;
-}
-
-void Station::setId(int id) {
-    this->id = id;
-}
-
 void Station::setVisited(bool visited) {
     this->visited = visited;
 }

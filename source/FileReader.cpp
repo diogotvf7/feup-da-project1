@@ -28,7 +28,7 @@ string FileReader::strip(const string &str) const {
 void FileReader::readStations() {
 
     int id = 0;
-    ifstream csv("../dataset/stations.csv");
+    ifstream csv("path + /stations.csv");
     string buffer;
     getline(csv, buffer, '\n'); // Ignore Header
 
@@ -57,7 +57,7 @@ void FileReader::readStations() {
 
 void FileReader::readNetworks() {
 
-    ifstream csv("../dataset/network.csv");
+    ifstream csv(path + "/network.csv");
     string buffer;
     getline(csv, buffer, '\n'); // Ignore Header
 
@@ -70,7 +70,7 @@ void FileReader::readNetworks() {
         getline(tmp, capacity, ',');
         getline(tmp, service, '\n');
 
-        graph->addBidirectionalTrack(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
+        graph->addTrack(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
     }
 }
 

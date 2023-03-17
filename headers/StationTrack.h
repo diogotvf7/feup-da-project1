@@ -40,6 +40,7 @@ public:
     [[nodiscard]] std::string getMunicipality() const;
     [[nodiscard]] std::string getTownship() const;
     [[nodiscard]] std::string getLine() const;
+    
     // auxiliary get functions
     [[nodiscard]] int getId() const;
     [[nodiscard]] std::vector<Track*> getAdj() const;
@@ -50,12 +51,12 @@ public:
     [[nodiscard]] Track *getPath() const;
     [[nodiscard]] std::vector<Track*> getIncoming() const;
 
-
     void setName(const std::string &name);
     void setDistrict(const std::string &district);
     void setMunicipality(const std::string &municipality);
     void setTownship(const std::string &township);
     void setLine(const std::string &line);
+    
     // auxiliary set functions
     void setId(int id);
     void setVisited(bool visited);

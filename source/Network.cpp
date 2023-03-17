@@ -18,7 +18,7 @@ bool Network::addStation(Station* station) {
     return false;
 }
 
-bool Network::addTrack(const string &sourc, const string &dest, double capacity, const std::string &service) {
+bool Network::addTrack(const string &sourc, const string &dest, double capacity, const string &service) {
     auto v1 = findStation(sourc);
     auto v2 = findStation(dest);
     if (v1 == nullptr || v2 == nullptr)
@@ -27,7 +27,7 @@ bool Network::addTrack(const string &sourc, const string &dest, double capacity,
     return true;
 }
 
-bool Network::addBidirectionalTrack(const string &source,const string &dest, double capacity, const std::string &service) {
+bool Network::addBidirectionalTrack(const string &source,const string &dest, double capacity, const string &service) {
 
     Station* s1 = findStation(source);
     Station* s2 = findStation(dest);
@@ -45,7 +45,9 @@ int Network::getNumStations()  const {
     return stationsSet.size();
 }
 
-vector<Station*> Network::getStationsSet() const {return stationsSet;}
+vector<Station*> Network::getStationsSet() const {
+    return stationsSet;
+}
 
 vector<Track*> Network::getTracksSet() const {
     vector<Track*> tracksSet;
@@ -59,7 +61,7 @@ vector<Track*> Network::getTracksSet() const {
 }
 
 
-void Network::testAndVisit(std::queue<Station *> &q, Track *t, Station *s, double residual) {
+void Network::testAndVisit(queue<Station *> &q, Track *t, Station *s, double residual) {
     if(!s->isVisited() && residual > 0){
         s->setVisited(true);
         s->setPath(t);
@@ -97,11 +99,11 @@ double Network::findMinResidualAlongPath(Station *source, Station *dest) {
     for (auto v = dest; v != source; ) {
         auto e = v->getPath();
         if (e->getDestination() == v) {
-            f = std::min(f, e->getCapacity() - e->getFlow());
+            f = min(f, e->getCapacity() - e->getFlow());
             v = e->getSource();
         }
         else {
-            f = std::min(f, e->getFlow());
+            f = min(f, e->getFlow());
             v = e->getDestination();
         }
     }
@@ -129,7 +131,7 @@ void Network::edmondsKarp(const string &source, const string &dest) {
     Station *stationDest = findStation(dest);
 
     if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest) {
-        throw std::logic_error("Invalid source and/or target vertex");
+        throw logic_error("Invalid source and/or target vertex");
     }
 
     for (Station *station: stationsSet) {
@@ -143,3 +145,24 @@ void Network::edmondsKarp(const string &source, const string &dest) {
         augmentFlowAlongPath(stationSource, stationDest, f);
     }
 }
+
+pair<double,vector<pair<Station*,Station*>>> Network::topMaxFlow() {
+    vector<pair<Station*,Station*>> ans;
+    double maxFlow = 0;
+
+    for (Station *src : stationsSet) {
+        for (Station *dest : stationsSet) {
+            if (src == dest) continue;
+            edmondsKarp(src->getName(), dest->getName());
+            double flow = dest->getFlow();
+            if (flow < maxFlow) continue;
+            else if (flow > maxFlow) {
+                maxFlow = flow;
+                ans.clear();
+            }
+            ans.emplace_back(src, dest);
+        }
+    }
+    return {maxFlow, ans};
+}
+

@@ -8,7 +8,8 @@
 using namespace std;
 
 int main() {
-    Network *g = new Network();
+
+    /*Network *g = new Network();
     string path = "../dataset/test-dataset/";
     FileReader fr = FileReader(path, g);
 
@@ -17,8 +18,7 @@ int main() {
 
     cout << "Hello World!" << endl;
 
-    /*
-    for (StationTrack *station : g->getStationsVector()) {
+    for (Station *station : g->getStationsSet()) {
         cout << left << "|--|" << setw(30) << station->getName() << "|--|" << setw(30) << station->getDistrict() << "|--|"
                 << setw(30) << station->getMunicipality() << "|--|" << setw(40) << station->getTownship() << "|--|"
                 << setw(20) << station->getLine() << "|--|" << endl;
@@ -26,12 +26,22 @@ int main() {
                 "-----------------------------------------------------------------------------------" << endl;
     }
 
-    for (StationTrack *station : g->getStationsVector()) {
+    for (Station *station : g->getStationsSet()) {
         break;
     }
-     */
     std::string string1 = "Porto Campanhã", string2 = "Pinhal Novo";
-    g->edmondsKarp(string1, string2);
-    
+    g->edmondsKarp(string1, string2);*/
+
+
+    Network *g2 = new Network();
+    string path2 = "../dataset/real-dataset/";
+    FileReader fr2 = FileReader(path2, g2);
+    fr2.readStations();
+    fr2.readNetworks();
+    std::pair<double,std::vector<std::pair<Station*,Station*>>> tmf = g2->topMaxFlow();
+    for (auto &i : tmf.second) {
+        std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
+    }
+
     return 0;
 }

@@ -123,7 +123,7 @@ void Network::augmentFlowAlongPath(Station *source, Station *dest, double f) {
     }
 }
 
-void Network::edmondsKarp(std::string source, std::string dest) {
+void Network::edmondsKarp(const string &source, const string &dest) {
 
     Station *stationSource = findStation(source);
     Station *stationDest = findStation(dest);

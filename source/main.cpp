@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
     Network *g = new Network();
-    string path = "dataset/";
+    string path = "../dataset/test-dataset/";
     FileReader fr = FileReader(path, g);
 
     fr.readStations();
@@ -30,8 +30,8 @@ int main() {
         break;
     }
      */
-     
-    g->edmondsKarp("Porto Campanhã", "Pinhal Novo");
+    std::string string1 = "Porto Campanhã", string2 = "Pinhal Novo";
+    g->edmondsKarp(string1, string2);
     
     return 0;
 }

@@ -19,7 +19,7 @@ public:
     std::vector<Station*> getStationsSet() const;
 
     /*EdmondsKarp algorithm and its auxiliary functions*/
-    void edmondsKarp(std::string source, std::string dest);
+    void edmondsKarp(const std::string &source, const std::string &dest);
     bool findAugmentingPath(Station* source, Station* dest);
     void testAndVisit(std::queue<Station*> &q, Track *t, Station* s, double residual);
     double findMinResidualAlongPath(Station* source, Station* dest);

@@ -10,8 +10,8 @@ add_executable(
         feup_da_project
         source/main.cpp
 
-        dataset/network.csv
-        dataset/stations.csv
+        dataset/real-dataset/network.csv
+        dataset/real-dataset/stations.csv
         headers/FileReader.h
         source/FileReader.cpp
         headers/StationTrack.h

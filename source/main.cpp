@@ -1,5 +1,7 @@
 #include <string>
 #include <iomanip>
+#include <map>
+#include <set>
 #include "iostream"
 
 #include "headers/Network.h"
@@ -38,10 +40,11 @@ int main() {
     FileReader fr2 = FileReader(path2, g2);
     fr2.readStations();
     fr2.readNetworks();
-    std::pair<double,std::vector<std::pair<Station*,Station*>>> tmf = g2->topMaxFlow();
-    for (auto &i : tmf.second) {
-        std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
-    }
+    //std::pair<double,std::vector<std::pair<Station*,Station*>>> tmf = g2->topMaxFlow();
+    //for (auto &i : tmf.second) {
+    //    std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
+    //}
+    vector<pair<string, double>> test = g2->topTransportationNeeds("municipality");
 
     return 0;
 }

@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <vector>
 #include <queue>
-
+#include <set>
+#include <map>
 #include "StationTrack.h"
 
 class Network {
@@ -30,7 +31,11 @@ public:
     double findMinResidualAlongPath(Station* source, Station* dest);
     void augmentFlowAlongPath(Station* source, Station* dest, double f);
 
+    /*This function refers to exercise 2.2*/
     std::pair<double,std::vector<std::pair<Station*,Station*>>> topMaxFlow();
+
+    /*This function refers to exercise 2.3*/
+    std::vector<std::pair<std::string, double>>topTransportationNeeds(std::string location);
 };
 
 

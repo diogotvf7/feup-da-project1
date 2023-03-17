@@ -44,7 +44,7 @@ int main() {
     //for (auto &i : tmf.second) {
     //    std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
     //}
-    vector<pair<string, double>> test = g2->topTransportationNeeds("district");
-
+    //vector<pair<string, double>> test = g2->topTransportationNeeds("district");
+    g2->maxTrainsStation(g2->getStationsSet()[6]);
     return 0;
 }

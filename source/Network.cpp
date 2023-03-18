@@ -219,6 +219,21 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location){
 
     sort(res.begin(), res.end(), customComparator);
     return res;
+}
+
+double Network::maxTrainsStation(Station* dest) {
+
+    Station* superSource = new Station("test", "test", "test", "test", "test");
+
+    for(Station* station : stationsSet){
+        if(station != dest){
+            superSource->addTrack(station, INT16_MAX, "REGULAR");
+        }
+    }
+    addStation(superSource);
+
+    edmondsKarp(superSource->getName(), dest->getName());
+    return dest->getFlow();
 
 }
 

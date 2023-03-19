@@ -43,7 +43,7 @@ bool Network::addBidirectionalTrack(const string &source,const string &dest, dou
 }
 
 int Network::getNumStations()  const {
-    return stationsSet.size();
+    return (int) stationsSet.size();
 }
 
 vector<Station*> Network::getStationsSet() const {
@@ -58,9 +58,7 @@ vector<Track*> Network::getTracksSet() const {
         }
     }
     return tracksSet;
-    
 }
-
 
 void Network::testAndVisit(queue<Station *> &q, Track *t, Station *s, double residual) {
     if(!s->isVisited() && residual > 0){

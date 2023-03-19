@@ -36,6 +36,10 @@ public:
 
     /*This function refers to exercise 2.3*/
     std::vector<std::pair<std::string, double>>topTransportationNeeds(std::string location);
+
+    /*This function refers to exercise 2.4*/
+    double maxTrainsStation(Station* dest);
+
 };
 
 

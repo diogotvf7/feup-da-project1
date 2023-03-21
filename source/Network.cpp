@@ -1,10 +1,12 @@
 #include <map>
+
 #include "headers/Network.h"
+
 using namespace std;
 
 Station* Network::findStation(string stationName) const {
-    for(Station* station : stationsSet){
-        if(station->getName() == stationName){
+    for(Station* station : stationsSet) {
+        if(station->getName() == stationName) {
             return station;
         }
     }
@@ -12,7 +14,7 @@ Station* Network::findStation(string stationName) const {
 }
 
 bool Network::addStation(Station* station) {
-    if(findStation(station->getName()) == nullptr){
+    if(findStation(station->getName()) == nullptr) {
         stationsSet.push_back(station);
         return true;
     }
@@ -32,7 +34,7 @@ bool Network::addBidirectionalTrack(const string &source,const string &dest, dou
 
     Station* s1 = findStation(source);
     Station* s2 = findStation(dest);
-    if(s1 == nullptr || s2 == nullptr){
+    if(s1 == nullptr || s2 == nullptr) {
         return false;
     }
     Track* t1 = s1->addTrack(s2, capacity, service);
@@ -52,8 +54,8 @@ vector<Station*> Network::getStationsSet() const {
 
 vector<Track*> Network::getTracksSet() const {
     vector<Track*> tracksSet;
-    for(Station* station : stationsSet){
-        for(Track* track : station->getAdj()){
+    for(Station* station : stationsSet) {
+        for(Track* track : station->getAdj()) {
             tracksSet.push_back(track);
         }
     }
@@ -63,7 +65,7 @@ vector<Track*> Network::getTracksSet() const {
 
 
 void Network::testAndVisit(queue<Station *> &q, Track *t, Station *s, double residual) {
-    if(!s->isVisited() && residual > 0){
+    if(!s->isVisited() && residual > 0) {
         s->setVisited(true);
         s->setPath(t);
         q.push(s);
@@ -71,7 +73,7 @@ void Network::testAndVisit(queue<Station *> &q, Track *t, Station *s, double res
 }
 
 bool Network::findAugmentingPath(Station *source, Station *dest) {
-    for(Station* station : stationsSet){
+    for(Station* station : stationsSet) {
         if(station->getName() != source->getName())
             station->setVisited(false);
         else
@@ -81,14 +83,14 @@ bool Network::findAugmentingPath(Station *source, Station *dest) {
     queue<Station*> q;
     q.push(source);
 
-    while(!q.empty() && !(dest->isVisited())){
+    while(!q.empty() && !(dest->isVisited())) {
         Station* v = q.front();
         q.pop();
-        for(Track* t : v->getAdj()){
+        for(Track* t : v->getAdj()) {
             testAndVisit(q, t, t->getDestination(),  t->getCapacity() - t->getFlow());
         }
 
-        for(Track* t : v->getIncoming()){
+        for(Track* t : v->getIncoming()) {
             testAndVisit(q, t, t->getSource(), t->getFlow());
         }
     }
@@ -168,12 +170,12 @@ pair<double,vector<pair<Station*,Station*>>> Network::topMaxFlow() {
 }
 
 struct{
-        bool operator() (const pair<string, double>& pair1, const pair<string, double>& pair2){
+        bool operator() (const pair<string, double>& pair1, const pair<string, double>& pair2) {
             return (pair1.second > pair2.second);
         }
 }customComparator;
 
-vector<pair<string, double>> Network::topTransportationNeeds(string location){
+vector<pair<string, double>> Network::topTransportationNeeds(string location) {
 
     vector<pair<string, double>> res;
 
@@ -192,9 +194,8 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location){
             return p.first == locStr;
         });
 
-        if ((itr == res.end() || res.empty()) && !locStr.empty()) {
-            res.push_back(make_pair(locStr, 0));
-        }
+        if ((itr == res.end() || res.empty()) && !locStr.empty())
+            res.emplace_back(locStr, 0);
     }
 
     for (Station* src : stationsSet) {
@@ -225,8 +226,8 @@ double Network::maxTrainsStation(Station* dest) {
 
     Station* superSource = new Station("test", "test", "test", "test", "test");
 
-    for(Station* station : stationsSet){
-        if(station != dest){
+    for(Station* station : stationsSet) {
+        if(station != dest) {
             superSource->addTrack(station, INT16_MAX, "REGULAR");
         }
     }

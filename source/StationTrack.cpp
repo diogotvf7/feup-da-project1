@@ -1,7 +1,3 @@
-//
-// Created by Daniel Rebelo on 08/03/2023.
-//
-
 #include "headers/StationTrack.h"
 
 using namespace std;

@@ -222,18 +222,36 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
     return res;
 }
 
+void Network::DFS(vector<Station *> &endStations, Station *srcStation) {
+
+    srcStation->setVisited(true);
+    bool unvisitedNeighbours = false;
+    for(Track* track : srcStation->getIncoming()){
+        if(!track->getSource()->isVisited()){
+            unvisitedNeighbours = true;
+            DFS(endStations, track->getSource());
+        }
+    }
+    if(!unvisitedNeighbours)
+        endStations.push_back(srcStation);
+
+}
+
+
 double Network::maxTrainsStation(Station* dest) {
+
+    vector<Station*> endStations;
+    for(Station* station : stationsSet){station->setVisited(false);}
+    DFS(endStations, dest);
 
     Station* superSource = new Station("test", "test", "test", "test", "test");
 
-    for(Station* station : stationsSet) {
-        if(station != dest) {
-            superSource->addTrack(station, INT16_MAX, "REGULAR");
-        }
+    for(Station* station : endStations) {
+        superSource->addTrack(station, INT16_MAX, "REGULAR");
     }
     addStation(superSource);
-
     edmondsKarp(superSource->getName(), dest->getName());
+
     return dest->getFlow();
 
 }

@@ -38,6 +38,7 @@ public:
     std::vector<std::pair<std::string, double>>topTransportationNeeds(std::string location);
 
     /*This function refers to exercise 2.4*/
+    void DFS(std::vector<Station*> &endStations, Station* srcStation);
     double maxTrainsStation(Station* dest);
 
 };

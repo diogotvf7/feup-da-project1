@@ -44,6 +44,9 @@ int main() {
     //    std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
     //}
     //vector<pair<string, double>> test = g2->topTransportationNeeds("district");
-    g2->maxTrainsStation(g2->getStationsSet()[6]);
+    Station* test = g2->getStationsSet()[56];
+    double res = g2->maxTrainsStation(test);
+    //g2->edmondsKarp(g2->getStationsSet()[5]->getName(), g2->getStationsSet()[6]->getName());
+    //double test = g2->getStationsSet()[6]->getFlow();
     return 0;
 }

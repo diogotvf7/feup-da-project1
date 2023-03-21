@@ -73,7 +73,7 @@ bool Network::findAugmentingPath(Station *source, Station *dest) {
         if(station->getName() != source->getName())
             station->setVisited(false);
         else
-            station->setVisited(true);  \
+            station->setVisited(true);
     }
 
     queue<Station*> q;
@@ -145,6 +145,32 @@ void Network::edmondsKarp(const string &source, const string &dest) {
     }
 }
 
+void Network::edmondsKarp2(const string &source, const string &dest) {
+
+    Station *stationSource = findStation(source);
+    Station *stationDest = findStation(dest);
+
+    double cost = 0;
+
+    if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest) {
+        throw logic_error("Invalid source and/or target vertex");
+    }
+
+    for (Station *station: stationsSet) {
+        for (Track *track: station->getAdj()) {
+            track->setFlow(0);
+        }
+    }
+
+    while (findAugmentingPath(stationSource, stationDest)) {
+        double f = findMinResidualAlongPath(stationSource, stationDest);
+        augmentFlowAlongPath(stationSource, stationDest, f);
+
+    }
+
+ }
+
+
 pair<double,vector<pair<Station*,Station*>>> Network::topMaxFlow() {
     vector<pair<Station*,Station*>> ans;
     double maxFlow = 0;
@@ -155,7 +181,7 @@ pair<double,vector<pair<Station*,Station*>>> Network::topMaxFlow() {
             edmondsKarp(src->getName(), dest->getName());
             double flow = dest->getFlow();
             if (flow < maxFlow) continue;
-            else if (flow > maxFlow) {
+            if (flow > maxFlow) {
                 maxFlow = flow;
                 ans.clear();
             }
@@ -190,7 +216,7 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location){
             return p.first == locStr;
         });
 
-        if ((itr == res.end() || res.empty()) && !locStr.empty()) {
+        if ((itr == res.end() ) && !locStr.empty()) {
             res.push_back(make_pair(locStr, 0));
         }
     }
@@ -225,7 +251,7 @@ double Network::maxTrainsStation(Station* dest) {
 
     for(Station* station : stationsSet){
         if(station != dest){
-            superSource->addTrack(station, INT16_MAX, "REGULAR");
+            superSource->addTrack(station, INT16_MAX, "STANDARD");
         }
     }
     addStation(superSource);

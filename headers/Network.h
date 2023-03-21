@@ -26,6 +26,7 @@ public:
      * This functions refer to exercise 2.1
      * */
     void edmondsKarp(const std::string &source, const std::string &dest);
+    void edmondsKarp2(const std::string &source, const std::string &dest);
     bool findAugmentingPath(Station* source, Station* dest);
     void testAndVisit(std::queue<Station*> &q, Track *t, Station* s, double residual);
     double findMinResidualAlongPath(Station* source, Station* dest);

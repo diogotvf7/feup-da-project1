@@ -36,19 +36,12 @@ int main() {
 
 
     Network *g2 = new Network();
-    string path2 = "dataset/real-dataset/";
+    string path2 = "dataset/test-dataset/";
     FileReader fr2 = FileReader(path2, g2);
     fr2.readStations();
     fr2.readNetworks();
-    //std::pair<double,std::vector<std::pair<Station*,Station*>>> tmf = g2->topMaxFlow();
-    //for (auto &i : tmf.second) {
-    //    std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
-    //}
-    string a = "Porto Campanhã" , b = "Lisboa Oriente";
-    g2->edmondsKarp(a, b);
 
-    // vector<pair<string, double>> test = g2->topTransportationNeeds("district");
-    //vector<pair<string, double>> test = g2->topTransportationNeeds("district");
+    g2->topMaxFlow();
 
     return 0;
 }

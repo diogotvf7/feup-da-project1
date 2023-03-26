@@ -44,6 +44,22 @@ bool Network::addBidirectionalTrack(const string &source,const string &dest, dou
     return true;
 }
 
+bool Network::removeStation(std::string name) {
+    for (auto it = stationsSet.begin(); it != stationsSet.end(); it++) {
+        if ((*it)->getName() == name) {
+            auto v = *it;
+            v->removeOutgoingTracks();
+            for (auto u : stationsSet) {
+                u->removeTrack(v->getName());
+            }
+            stationsSet.erase(it);
+            delete v;
+            return true;
+        }
+    }
+    return false;
+}
+
 int Network::getNumStations()  const {
     return stationsSet.size();
 }
@@ -251,6 +267,7 @@ double Network::maxTrainsStation(Station* dest) {
     }
     addStation(superSource);
     edmondsKarp(superSource->getName(), dest->getName());
+    removeStation(superSource->getName());
 
     return dest->getFlow();
 

@@ -100,6 +100,50 @@ double Station::getFlow() const {
     return flow;
 }
 
+void Station::deleteTrack(Track *track) {
+    Station *dest = track->getDestination();
+    // Remove the corresponding edge from the incoming list
+    auto it = dest->incoming.begin();
+    while (it != dest->incoming.end()) {
+        if ((*it)->getSource()->getId() == id) {
+            it = dest->incoming.erase(it);
+        }
+        else {
+            it++;
+        }
+    }
+    delete track;
+}
+
+bool Station::removeTrack(string name) {
+    bool removedEdge = false;
+    auto it = adj.begin();
+    while (it != adj.end()) {
+        Track *edge = *it;
+        Station *dest = edge->getDestination();
+        if (dest->getName() == name) {
+            it = adj.erase(it);
+            deleteTrack(edge);
+            removedEdge = true; // allows for multiple edges to connect the same pair of vertices (multigraph)
+        }
+        else {
+            it++;
+        }
+    }
+    return removedEdge;
+}
+
+void Station::removeOutgoingTracks() {
+    auto it = adj.begin();
+    while (it != adj.end()) {
+        Track *track = *it;
+        it = adj.erase(it);
+        deleteTrack(track);
+    }
+
+}
+
+
 Track::Track(Station *src, Station *dest, int capacity, const string &service) {
     this->src = src;
     this->dest = dest;

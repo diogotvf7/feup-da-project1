@@ -60,7 +60,9 @@ public:
     void setDist(double dist);
     void setPath(Track *path);
     Track *addTrack(Station *dest, int capacity, const std::string &service);
-    bool removeTrack(int destID);
+    bool removeTrack(std::string name);
+    void deleteTrack(Track *edge);
+    void removeOutgoingTracks();
 };
 
 /********************** Track  ****************************/

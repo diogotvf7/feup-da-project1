@@ -180,6 +180,9 @@ pair<double,vector<pair<Station*,Station*>>> Network::topMaxFlow() {
     for (Station *src : stationsSet) {
         for (Station *dest : stationsSet) {
             if (src == dest) continue;
+            if (src->getName() == "Pinhal Novo" && dest->getName() == "Porto Campanhã"){
+                int x = 0;
+            }
             edmondsKarp(src->getName(), dest->getName());
             double flow = dest->getFlow();
             if (flow < maxFlow) continue;
@@ -253,7 +256,7 @@ double Network::maxTrainsStation(Station* dest) {
     Station* superSource = new Station("test", "test", "test", "test", "test");
 
     for(Station* station : stationsSet){
-        if(station != dest){    
+        if(station != dest){
             superSource->addTrack(station, INT16_MAX, "STANDARD");
 
         }

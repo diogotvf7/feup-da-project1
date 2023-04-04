@@ -65,7 +65,7 @@ void FileReader::readNetworks() {
         getline(tmp, capacity, ',');
         getline(tmp, service, '\n');
 
-        graph->addTrack(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
+        graph->addBidirectionalTrack(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
     }
 }
 

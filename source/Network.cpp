@@ -61,7 +61,7 @@ bool Network::removeStation(std::string name) {
 }
 
 int Network::getNumStations()  const {
-    return stationsSet.size();
+    return (int) stationsSet.size();
 }
 
 vector<Station*> Network::getStationsSet() const {
@@ -93,7 +93,7 @@ bool Network::findAugmentingPath(Station *source, Station *dest) {
         if(station->getName() != source->getName())
             station->setVisited(false);
         else
-            station->setVisited(true);  \
+            station->setVisited(true);
     }
 
     queue<Station*> q;
@@ -115,6 +115,8 @@ bool Network::findAugmentingPath(Station *source, Station *dest) {
 
 double Network::findMinResidualAlongPath(Station *source, Station *dest) {
     double f = INT16_MAX;
+    int cost = 0;
+    cout << "cost is " << cost << endl;
     for (auto v = dest; v != source; ) {
         auto e = v->getPath();
         if (e->getDestination() == v) {
@@ -125,9 +127,58 @@ double Network::findMinResidualAlongPath(Station *source, Station *dest) {
             f = min(f, e->getFlow());
             v = e->getDestination();
         }
+        cost += e->getService() == "STANDARD" ? 4 : 2;
     }
+    cout << "cost is: " << cost << " and flow is: " << f << endl;
     return f;
 }
+
+pair<int,int> Network::edmondsKarpCost(const string &source, const string &dest) {
+
+    Station *stationSource = findStation(source);
+    Station *stationDest = findStation(dest);
+    vector<pair<int,int>> all_flowCosts;
+
+    if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest) {
+        throw logic_error("Invalid source and/or target vertex");
+    }
+
+    for (Station *station: stationsSet) {
+        for (Track *track: station->getAdj()) {
+            track->setFlow(0);
+        }
+    }
+
+    while (findAugmentingPath(stationSource, stationDest)) {
+        pair<int,int> flowCost = findMinResidualCostAlongPath(stationSource, stationDest);
+        all_flowCosts.push_back(flowCost);
+        augmentFlowAlongPath(stationSource, stationDest, flowCost.first);
+    }
+
+    std::sort(all_flowCosts.begin(), all_flowCosts.end(),
+              [](pair<int,int> p1,pair<int,int> p2){if (p1.first == p2.first) return p1.second < p2.second; return p1.first > p2.first; });
+    return all_flowCosts.at(0);
+}
+
+std::pair<int,int> Network::findMinResidualCostAlongPath(Station *source, Station *dest) {
+    double f = INT16_MAX;
+    int cost = 0;
+    for (auto v = dest; v != source; ) {
+        auto e = v->getPath();
+        if (e->getDestination() == v) {
+            f = min(f, e->getCapacity() - e->getFlow());
+            v = e->getSource();
+        }
+        else {
+            f = min(f, e->getFlow());
+            v = e->getDestination();
+        }
+        cost += e->getService() == "STANDARD" ? 4 : 2;
+    }
+    return {f,cost};
+}
+
+
 
 void Network::augmentFlowAlongPath(Station *source, Station *dest, double f) {
     for (auto v = dest; v != source; ) {
@@ -250,9 +301,7 @@ void Network::DFS(vector<Station *> &endStations, Station *srcStation) {
     }
     if(!unvisitedNeighbours)
         endStations.push_back(srcStation);
-
 }
-
 
 double Network::maxTrainsStation(Station* dest) {
 

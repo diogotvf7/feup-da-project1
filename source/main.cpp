@@ -39,14 +39,10 @@ int main() {
     FileReader fr2 = FileReader(path2, g2);
     fr2.readStations();
     fr2.readNetworks();
-    //std::pair<double,std::vector<std::pair<Station*,Station*>>> tmf = g2->topMaxFlow();
-    //for (auto &i : tmf.second) {
-    //    std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
-    //}
-    //vector<pair<string, double>> test = g2->topTransportationNeeds("district");
-    Station* test = g2->getStationsSet()[56];
-    double res = g2->maxTrainsStation(test);
-    //g2->edmondsKarp(g2->getStationsSet()[5]->getName(), g2->getStationsSet()[6]->getName());
-    //double test = g2->getStationsSet()[6]->getFlow();
+    Station* s = g2->findStation("Porto Campanhã");
+    Station* s2 = g2->findStation("Lisboa Oriente");
+    //vector<vector<Track *>> all_paths = g2->allPaths(s,s2);
+    pair<int,int> p = g2->edmondsKarpCost("Porto Campanhã","Lisboa Oriente");
+    cout << "Flow is " << p.first << " cost is " << p.second << endl;
     return 0;
 }

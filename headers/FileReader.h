@@ -1,27 +1,24 @@
-#ifndef PROJECT_FILEREADER_H
-#define PROJECT_FILEREADER_H
+#ifndef FILEREADER_H
+#define FILEREADER_H
 
-#include <iostream>
 #include <string>
-#include <vector>
-#include <sstream>
 #include <fstream>
+#include <sstream>
 
 #include "Network.h"
 #include "StationTrack.h"
 
-class FileReader {
-    std::string path;
-    Network *graph;
+namespace FileReader {
 
-public:
-    FileReader(const std::string &path, Network *graph);
-    static bool discard(char c) ;
-    void readStations();
-    [[nodiscard]] std::string strip(const std::string &str) const;
-    std::string capitalizeFirstLetter(const std::string& str);
-    void readNetworks();
-};
+    bool discard(char c);
 
-#endif //PROJECT_FILEREADER_H
+    std::string capitalizeFirstLetter(const std::string &str);
 
+    std::string strip(const std::string &str);
+
+    void readStations(const std::string &path, Network *graph);
+
+    void readNetwork(const std::string &path, Network *graph);
+}
+
+#endif //FILEREADER_H

@@ -18,6 +18,7 @@ int main () {
     Network *test_network = nm.createGraph("../dataset/test-dataset/");
 
     /*#############################################*/
+<<<<<<< HEAD
     
     pair<int,int> p = real_network->edmondsKarpCost("Porto Campanhã","Lisboa Oriente");
     cout << "Flow is " << p.first << " cost is " << p.second << endl;
@@ -34,6 +35,22 @@ int main () {
 
     /*############################################*/
     /*         Test reduced connectivity
+=======
+
+
+    /*##############################################*/
+    /*              Real Top Max Flow              */
+
+//    std::pair<double,std::vector<std::pair<Station*,Station*>>> tmf = real_network->topMaxFlow();
+//    for (auto &i : tmf.second)
+//        std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
+
+    /*#############################################*/
+
+
+    /*############################################*/
+    /*         Test reduced connectivity         */
+
     vector<string> reduceStations;
     tracks_vector reduceTracks;
 
@@ -68,6 +85,8 @@ int main () {
 
     /*############################################*/
     /*           Test maxTrainsStation
+=======
+    /*           Test maxTrainsStation           
     Station *puortoooo = test_network->findStation("Porto Campanhã");
     cout << "Max trains arriving at Porto Campanhã: " << test_network->maxTrainsStation(puortoooo) << endl;
     Station *faroooooo = test_network->findStation("Faro");
@@ -75,6 +94,5 @@ int main () {
     Station *fds = test_network->findStation("Ermidas-Sado");
     cout << "Max trains arriving at Ermidas-Sado: " << test_network->maxTrainsStation(fds) << endl;
     */
-
     return 0;
 }

@@ -57,13 +57,21 @@ int main () {
     cout << "Max Flow in normal circumstances: " << nm.maxFlowBetween(test_network, "Lisboa Oriente", "Porto Campanhã") << endl;
     cout << "Max Flow in reduced connectivity (cutting stations): " << nm.maxFlowBetween(test_reduced_network2, "Lisboa Oriente", "Ermidas-Sado") << endl;
     cout << "Max Flow in reduced connectivity (cutting tracks): " << nm.maxFlowBetween(test_reduced_network3, "Lisboa Oriente", "Ermidas-Sado") << endl;
+    nm.deleteGraph(test_reduced_network2);
+    nm.deleteGraph(test_reduced_network3);
     cout << endl;
 
+    /*#############################################*/
 
 
+    /*############################################*/
+    /*           Test maxTrainsStation           */
+    Station *puortoooo = test_network->findStation("Porto Campanhã");
+    cout << "Max trains arriving at Porto Campanhã: " << test_network->maxTrainsStation(puortoooo) << endl;
+    Station *faroooooo = test_network->findStation("Faro");
+    cout << "Max trains arriving at Faro: " << test_network->maxTrainsStation(faroooooo) << endl;
+    Station *fds = test_network->findStation("Ermidas-Sado");
+    cout << "Max trains arriving at Ermidas-Sado: " << test_network->maxTrainsStation(fds) << endl;
 
-
-//    Station* test = g2->getStationsSet()[56];
-//    double res = g2->maxTrainsStation(test);
     return 0;
 }

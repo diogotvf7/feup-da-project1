@@ -1,52 +1,69 @@
 #include <iostream>
 #include <string>
-#include <set>
+#include <vector>
 
-#include "headers/Network.h"
-#include "headers/FileReader.h"
+#include "../headers/Network.h"
+#include "../headers/NetworkManager.h"
 
 
 using namespace std;
 
-int main() {
+int main () {
 
-    /*Network *g = new Network();
-    string path = "../dataset/test-dataset/";
-    FileReader fr = FileReader(path, g);
+     /*#############################################*/
+    /*          Structures initialization          */
 
-    fr.readStations();
-    fr.readNetworks();
+    NetworkManager nm;
+    Network *real_network = nm.createGraph("../dataset/real-dataset/");
+    Network *test_network = nm.createGraph("../dataset/test-dataset/");
 
-    cout << "Hello World!" << endl;
-
-    for (Station *station : g->getStationsSet()) {
-        cout << left << "|--|" << setw(30) << station->getName() << "|--|" << setw(30) << station->getDistrict() << "|--|"
-                << setw(30) << station->getMunicipality() << "|--|" << setw(40) << station->getTownship() << "|--|"
-                << setw(20) << station->getLine() << "|--|" << endl;
-        cout << "----------------------------------------------------------------------------------------------------"
-                "-----------------------------------------------------------------------------------" << endl;
-    }
-
-    for (Station *station : g->getStationsSet()) {
-        break;
-    }
-    std::string string1 = "Porto Campanhã", string2 = "Pinhal Novo";
-    g->edmondsKarp(string1, string2);*/
+    /*#############################################*/
 
 
-    Network *g2 = new Network();
-    string path2 = "../dataset/real-dataset/";
-    FileReader fr2 = FileReader(path2, g2);
-    fr2.readStations();
-    fr2.readNetworks();
-    //std::pair<double,std::vector<std::pair<Station*,Station*>>> tmf = g2->topMaxFlow();
-    //for (auto &i : tmf.second) {
-    //    std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
-    //}
-    //vector<pair<string, double>> test = g2->topTransportationNeeds("district");
-    Station* test = g2->getStationsSet()[56];
-    double res = g2->maxTrainsStation(test);
-    //g2->edmondsKarp(g2->getStationsSet()[5]->getName(), g2->getStationsSet()[6]->getName());
-    //double test = g2->getStationsSet()[6]->getFlow();
+    /*##############################################*/
+    /*              Real Top Max Flow              */
+
+//    std::pair<double,std::vector<std::pair<Station*,Station*>>> tmf = real_network->topMaxFlow();
+//    for (auto &i : tmf.second)
+//        std::cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << std::endl;
+
+    /*#############################################*/
+
+
+    /*############################################*/
+    /*         Test reduced connectivity         */
+    vector<string> reduceStations;
+    tracks_vector reduceTracks;
+
+    // Test 1
+    Network *test_reduced_network1 = nm.createGraph("../dataset/test-dataset/");
+    reduceStations = {"Ermidas-Sado"};
+    reduceTracks = {};
+    nm.reduceConnectivity(test_reduced_network1, reduceTracks, reduceStations);
+    cout << "Max Flow in normal circumstances: " << nm.maxFlowBetween(test_network, "Lisboa Oriente", "Porto Campanhã") << endl;
+    cout << "Max Flow in reduced connectivity circumstances: " << nm.maxFlowBetween(test_reduced_network1, "Lisboa Oriente", "Porto Campanhã") << endl;
+    nm.deleteGraph(test_reduced_network1);
+    cout << endl;
+
+    // Test 2
+    Network *test_reduced_network2 = nm.createGraph("../dataset/test-dataset/");
+    Network *test_reduced_network3 = nm.createGraph("../dataset/test-dataset/");
+    reduceStations = {"Faro", "Porto Campanhã"};
+    reduceTracks = {};
+    nm.reduceConnectivity(test_reduced_network2, reduceTracks, reduceStations);
+    reduceStations = {};
+    reduceTracks = {{"Ermidas-Sado", "Faro"}, {"Ermidas-Sado", "Porto Campanhã"}};
+    nm.reduceConnectivity(test_reduced_network3, reduceTracks, reduceStations);
+    cout << "Max Flow in normal circumstances: " << nm.maxFlowBetween(test_network, "Lisboa Oriente", "Porto Campanhã") << endl;
+    cout << "Max Flow in reduced connectivity (cutting stations): " << nm.maxFlowBetween(test_reduced_network2, "Lisboa Oriente", "Ermidas-Sado") << endl;
+    cout << "Max Flow in reduced connectivity (cutting tracks): " << nm.maxFlowBetween(test_reduced_network3, "Lisboa Oriente", "Ermidas-Sado") << endl;
+    cout << endl;
+
+
+
+
+
+//    Station* test = g2->getStationsSet()[56];
+//    double res = g2->maxTrainsStation(test);
     return 0;
 }

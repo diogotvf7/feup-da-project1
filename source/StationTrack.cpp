@@ -62,7 +62,7 @@ Track *Station::getPath() const {
     return path;
 }
 
-std::vector<Track *> Station::getIncoming() const {
+vector<Track *> Station::getIncoming() const {
     return incoming;
 }
 
@@ -100,49 +100,65 @@ double Station::getFlow() const {
     return flow;
 }
 
-void Station::deleteTrack(Track *track) {
-    Station *dest = track->getDestination();
-    // Remove the corresponding edge from the incoming list
-    auto it = dest->incoming.begin();
-    while (it != dest->incoming.end()) {
-        if ((*it)->getSource()->getId() == id) {
-            it = dest->incoming.erase(it);
+/*void Station::removeTrack(const string &dest) {
+    vector<Station*> aux;
+    auto in = incoming.begin(), out = adj.begin();
+    while (out != adj.end()) {
+        Track *track = *out;
+        if (track->getDestination()->getName() == dest) {
+            aux.push_back(track->getSource());
+            adj.erase(out);
+            delete track;
+            break;
         }
-        else {
-            it++;
+        out++;
+    }
+    while (in != incoming.end()) {
+        Track *track = *in;
+        if (track->getSource()->getName() == dest) {
+            incoming.erase(in);
+            delete track;
+            break;
+        }
+        in++;
+    }
+}*/
+
+void Station::removeOutgoingTrack(const string &dest) {
+    for (auto itr = adj.begin(); itr != adj.end(); itr++) {
+        Track *track = *itr;
+        if (track->getDestination()->getName() == dest) {
+            adj.erase(itr);
+            break;
         }
     }
-    delete track;
 }
 
-bool Station::removeTrack(string name) {
-    bool removedEdge = false;
-    auto it = adj.begin();
-    while (it != adj.end()) {
-        Track *edge = *it;
-        Station *dest = edge->getDestination();
-        if (dest->getName() == name) {
-            it = adj.erase(it);
-            deleteTrack(edge);
-            removedEdge = true; // allows for multiple edges to connect the same pair of vertices (multigraph)
-        }
-        else {
-            it++;
+void Station::removeIncomingTrack(const string &src) {
+    for (auto itr = incoming.begin(); itr != incoming.end(); itr++) {
+        Track *track = *itr;
+        if (track->getSource()->getName() == src) {
+            incoming.erase(itr);
+            break;
         }
     }
-    return removedEdge;
 }
 
 void Station::removeOutgoingTracks() {
-    auto it = adj.begin();
-    while (it != adj.end()) {
-        Track *track = *it;
-        it = adj.erase(it);
-        deleteTrack(track);
+    while (!adj.empty()) {
+        Track *track = adj.back();
+        removeOutgoingTrack(track->getDestination()->getName());
+        track->getDestination()->removeIncomingTrack(name);
     }
-
 }
 
+void Station::removeIncomingTracks() {
+    while (!incoming.empty()) {
+        Track *track = incoming.back();
+        track->getSource()->removeOutgoingTrack(name);
+        removeIncomingTrack(track->getSource()->getName());
+    }
+}
 
 Track::Track(Station *src, Station *dest, int capacity, const string &service) {
     this->src = src;
@@ -175,7 +191,7 @@ double Track::getFlow() const {
     return flow;
 }
 
-std::string Track::getService() const {
+string Track::getService() const {
     return service;
 }
 

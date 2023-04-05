@@ -8,13 +8,16 @@
 #include <queue>
 #include <set>
 #include <map>
+
 #include "StationTrack.h"
 
 class Network {
     std::vector<Station*> stationsSet;
 public:
-    Station* findStation(std::string stationName) const;
+    Station* findStation(const std::string &stationName) const;
     bool addStation(Station* station);
+    void removeTrack(const std::string src, const std::string dest);
+    void removeStation(const std::string &name);
     bool addTrack(const std::string &sourc, const std::string &dest, double capacity,const std::string &service);
     bool addBidirectionalTrack(const std::string &source,const std::string &dest, double capacity, const std::string &service);
     int getNumStations() const;
@@ -39,6 +42,7 @@ public:
     std::vector<std::pair<std::string, double>>topTransportationNeeds(std::string location);
 
     /*This function refers to exercise 2.4*/
+    void DFS(std::vector<Station*> &endStations, Station* srcStation);
     double maxTrainsStation(Station* dest);
 
 };

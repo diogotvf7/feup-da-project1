@@ -1,55 +1,12 @@
-#include "headers/FileReader.h"
+#include "../headers/FileReader.h"
 
-using namespace std;
+namespace FileReader {
 
-
-FileReader::FileReader(const string &path, Network *graph) {
-    this->path = path;
-    this->graph = graph;
-}
-
-bool FileReader::discard(char c) {
-    return c == ' ' || c == '"';
-}
-
-string FileReader::strip(const string &str) const {
-    if (str.empty()) return "";
-    string buffer;
-    auto lowerBound = str.begin(), upperBound = str.end();
-    while (discard(*lowerBound)) lowerBound++;
-    while (discard(*upperBound)) upperBound--;
-    return {lowerBound, upperBound};
-}
-
-void FileReader::readStations() {
-
-    ifstream csv(path + "stations.csv");
-    string buffer;
-    getline(csv, buffer, '\n'); // Ignore Header
-
-    while (getline(csv, buffer, '\n')) {
-        string name, district, municipality, township, line;
-        stringstream tmp(buffer);
-
-        getline(tmp, name, ',');
-        getline(tmp, district, ',');
-        getline(tmp, municipality, ',');
-
-        if (tmp.peek()  == '"') {
-            getline(tmp, township, '"');
-            getline(tmp, township, '"');
-        }
-        else {
-            getline(tmp, township, ',');
-        }
-        getline(tmp, line, ',');
-        getline(tmp, line, '\n');
-
-        graph->addStation(new Station(strip(name), capitalizeFirstLetter(strip(district)), capitalizeFirstLetter(strip(municipality)), strip(township),
-                                           capitalizeFirstLetter(strip(line))));
+    bool discard(char c) {
+        return c == ' ' || c == '"';
     }
-}
 
+<<<<<<< HEAD
 void FileReader::readNetworks() {
 
     ifstream csv(path + "network.csv");
@@ -66,19 +23,71 @@ void FileReader::readNetworks() {
         getline(tmp, service, '\n');
 
         graph->addBidirectionalTrack(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
+=======
+    std::string capitalizeFirstLetter(const std::string &str) {
+        std::string res = str;
+        for (size_t i = 0; i < res.size(); i++)
+            res[i] = i ? std::tolower(res[i]) : std::toupper(res[i]);
+        return res;
+>>>>>>> 47aef559d801082e1fdfc7f635f5f846b5143175
     }
-}
 
-std::string FileReader::capitalizeFirstLetter(const std::string& str)
-{
-    std::string result = str;
-    if (!result.empty()) {
-        result[0] = std::toupper(result[0]);
-        for (std::size_t i = 1; i < result.size(); ++i) {
-            result[i] = std::tolower(result[i]);
+    std::string strip(const std::string &str) {
+        if (str.empty()) return "";
+        std::string buffer;
+        auto lowerBound = str.begin(), upperBound = str.end();
+        while (discard(*lowerBound)) lowerBound++;
+        while (discard(*upperBound)) upperBound--;
+        return {lowerBound, upperBound};
+    }
+
+    void readStations(const std::string &path, Network *graph) {
+
+        std::ifstream csv(path + "stations.csv");
+        std::string buffer;
+        getline(csv, buffer, '\n'); // Ignore Header
+
+        while (getline(csv, buffer, '\n')) {
+            std::string name, district, municipality, township, line;
+            std::stringstream tmp(buffer);
+
+            getline(tmp, name, ',');
+            getline(tmp, district, ',');
+            getline(tmp, municipality, ',');
+
+            if (tmp.peek() == '"') {
+                getline(tmp, township, '"');
+                getline(tmp, township, '"');
+            } else {
+                getline(tmp, township, ',');
+            }
+            getline(tmp, line, ',');
+            getline(tmp, line, '\n');
+
+            graph->addStation(new Station(strip(name), capitalizeFirstLetter(strip(district)),
+                                          capitalizeFirstLetter(strip(municipality)), strip(township),
+                                          capitalizeFirstLetter(strip(line))));
         }
     }
-    return result;
-}
 
+    void readNetwork(const std::string &path, Network *graph) {
+
+        std::ifstream csv(path + "network.csv");
+        std::string buffer;
+        getline(csv, buffer, '\n'); // Ignore Header
+
+        while (getline(csv, buffer)) {
+
+            std::string src, dest, capacity, service;
+            std::stringstream tmp(buffer);
+            getline(tmp, src, ',');
+            getline(tmp, dest, ',');
+            getline(tmp, capacity, ',');
+            getline(tmp, service, '\n');
+
+            graph->addBidirectionalTrack(strip(src), strip(dest), stoi(capacity),
+                                         capitalizeFirstLetter(strip(service)));
+        }
+    }
+}
 

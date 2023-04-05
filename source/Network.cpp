@@ -1,12 +1,10 @@
-#include <map>
-
 #include "headers/Network.h"
 
 using namespace std;
 
-Station* Network::findStation(string stationName) const {
-    for(Station* station : stationsSet) {
-        if(station->getName() == stationName) {
+Station* Network::findStation(const string &stationName) const {
+    for (Station* station : stationsSet) {
+        if (station->getName() == stationName) {
             return station;
         }
     }
@@ -14,7 +12,7 @@ Station* Network::findStation(string stationName) const {
 }
 
 bool Network::addStation(Station* station) {
-    if(findStation(station->getName()) == nullptr) {
+    if (findStation(station->getName()) == nullptr) {
         stationsSet.push_back(station);
         return true;
     }
@@ -30,11 +28,11 @@ bool Network::addTrack(const string &sourc, const string &dest, double capacity,
     return true;
 }
 
-bool Network::addBidirectionalTrack(const string &source,const string &dest, double capacity, const string &service) {
+bool Network::addBidirectionalTrack(const string &source, const string &dest, double capacity, const string &service) {
 
     Station* s1 = findStation(source);
     Station* s2 = findStation(dest);
-    if(s1 == nullptr || s2 == nullptr) {
+    if (s1 == nullptr || s2 == nullptr) {
         return false;
     }
     Track* t1 = s1->addTrack(s2, capacity, service);
@@ -43,6 +41,27 @@ bool Network::addBidirectionalTrack(const string &source,const string &dest, dou
     t2->setReverse(t1);
     return true;
 }
+
+void Network::removeTrack(const std::string src, const std::string dest) {
+    auto srcItr = stationsSet.begin(), destItr = stationsSet.begin();
+    while (srcItr != stationsSet.end() && (*srcItr)->getName() != src) srcItr++;     // Find source station
+    while (destItr != stationsSet.end() && (*destItr)->getName() != dest) destItr++;     // Find source station
+    if (srcItr == stationsSet.end() || destItr == stationsSet.end()) return;                                 // Source or destination station not found
+    Station *srcStation = *srcItr;
+    Station *destStation = *destItr;
+    srcStation->removeOutgoingTrack(dest);
+    destStation->removeIncomingTrack(src);
+}
+
+void Network::removeStation(const string &name) {
+    auto itr = stationsSet.begin();
+    while (itr != stationsSet.end() && (*itr)->getName() != name) itr++;    // Find station
+    if (itr == stationsSet.end()) return;                                   // Station not found
+    (*itr)->removeIncomingTracks();
+    (*itr)->removeOutgoingTracks();
+    stationsSet.erase(itr);                                         // Remove station from set
+}
+
 
 int Network::getNumStations()  const {
     return (int) stationsSet.size();
@@ -72,7 +91,7 @@ void Network::testAndVisit(queue<Station *> &q, Track *t, Station *s, double res
 
 bool Network::findAugmentingPath(Station *source, Station *dest) {
     for(Station* station : stationsSet) {
-        if(station->getName() != source->getName())
+        if (station->getName() != source->getName())
             station->setVisited(false);
         else
             station->setVisited(true);
@@ -214,10 +233,9 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
         }
         return string("");
     };
-
     for (Station* station : stationsSet) {
         string locStr = getLocationString(station);
-        auto itr = std::find_if(res.begin(), res.end(), [&](const auto& p) {
+        auto itr = find_if(res.begin(), res.end(), [&](const auto& p) {
             return p.first == locStr;
         });
         if ((itr == res.end() ) && !locStr.empty()) {
@@ -226,7 +244,6 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
         if ((itr == res.end() || res.empty()) && !locStr.empty())
             res.emplace_back(locStr, 0);
     }
-
     for (Station* src : stationsSet) {
         string srcLocStr = getLocationString(src);
         for (Station* dest : stationsSet) {
@@ -234,38 +251,63 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
             edmondsKarp(src->getName(), dest->getName());
             double flow = dest->getFlow();
 
-            auto itrSource = std::find_if(res.begin(), res.end(), [&](const auto& p) {
+            auto itrSource = find_if(res.begin(), res.end(), [&](const auto& p) {
                 return p.first == srcLocStr;
             });
             itrSource->second += flow;
 
             string destLocStr = getLocationString(dest);
-            auto itrDest = std::find_if(res.begin(), res.end(), [&](const auto& p) {
+            auto itrDest = find_if(res.begin(), res.end(), [&](const auto& p) {
                 return p.first == destLocStr;
             });
             itrDest->second += flow;
         }
     }
-
     sort(res.begin(), res.end(), customComparator);
     return res;
 }
 
-double Network::maxTrainsStation(Station* dest) {
+void Network::DFS(vector<Station *> &endStations, Station *srcStation) {
 
+<<<<<<< HEAD
     Station* superSource = new Station("test", "test", "test", "test", "test");
 
     for(Station* station : stationsSet){
         if(station != dest){
             superSource->addTrack(station, INT16_MAX, "STANDARD");
 
+=======
+    srcStation->setVisited(true);
+    bool unvisitedNeighbours = false;
+    for(Track* track : srcStation->getIncoming()){
+        if(!track->getSource()->isVisited()){
+            unvisitedNeighbours = true;
+            DFS(endStations, track->getSource());
+>>>>>>> 47aef559d801082e1fdfc7f635f5f846b5143175
         }
     }
+    if(!unvisitedNeighbours)
+        endStations.push_back(srcStation);
+
+}
+
+
+double Network::maxTrainsStation(Station* dest) {
+
+    vector<Station*> endStations;
+    for (Station* station : stationsSet)
+        station->setVisited(false);
+    DFS(endStations, dest);
+
+    Station* superSource = new Station("test", "test", "test", "test", "test");
+
+    for (Station* station : endStations)
+        superSource->addTrack(station, INT16_MAX, "REGULAR");
     addStation(superSource);
-
     edmondsKarp(superSource->getName(), dest->getName());
-    return dest->getFlow();
+    removeStation(superSource->getName());
 
+    return dest->getFlow();
 }
 
 

@@ -35,6 +35,7 @@ public:
 
     bool operator<(Station *station) const; // // required by MutablePriorityQueue
 
+    // get functions
     [[nodiscard]] std::string getName() const;
     [[nodiscard]] std::string getDistrict() const;
     [[nodiscard]] std::string getMunicipality() const;
@@ -59,8 +60,13 @@ public:
     void setIndegree(unsigned int indegree);
     void setDist(double dist);
     void setPath(Track *path);
+
+    // other functions
     Track *addTrack(Station *dest, int capacity, const std::string &service);
-    bool removeTrack(int destID);
+    void removeOutgoingTrack(const std::string &dest);
+    void removeIncomingTrack(const std::string &src);
+    void removeOutgoingTracks();
+    void removeIncomingTracks();
 };
 
 /********************** Track  ****************************/

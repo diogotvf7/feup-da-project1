@@ -199,9 +199,6 @@ pair<double,vector<pair<Station*,Station*>>> Network::topMaxFlow() {
     for (Station *src : stationsSet) {
         for (Station *dest : stationsSet) {
             if (src == dest) continue;
-            if (src->getName() == "Pinhal Novo" && dest->getName() == "Porto Campanhã"){
-                int x = 0;
-            }
             edmondsKarp(src->getName(), dest->getName());
             double flow = dest->getFlow();
             if (flow < maxFlow) continue;
@@ -269,26 +266,25 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
 
 void Network::DFS(vector<Station *> &endStations, Station *srcStation) {
 
-<<<<<<< HEAD
-    Station* superSource = new Station("test", "test", "test", "test", "test");
+    Station *superSource = new Station("test", "test", "test", "test", "test");
 
-    for(Station* station : stationsSet){
-        if(station != dest){
+    for (Station *station: stationsSet) {
+        if (station != dest) {
             superSource->addTrack(station, INT16_MAX, "STANDARD");
 
-=======
-    srcStation->setVisited(true);
-    bool unvisitedNeighbours = false;
-    for(Track* track : srcStation->getIncoming()){
-        if(!track->getSource()->isVisited()){
-            unvisitedNeighbours = true;
-            DFS(endStations, track->getSource());
->>>>>>> 47aef559d801082e1fdfc7f635f5f846b5143175
+            srcStation->setVisited(true);
+            bool unvisitedNeighbours = false;
+            for (Track *track: srcStation->getIncoming()) {
+                if (!track->getSource()->isVisited()) {
+                    unvisitedNeighbours = true;
+                    DFS(endStations, track->getSource());
+                }
+            }
+            if (!unvisitedNeighbours)
+                endStations.push_back(srcStation);
+
         }
     }
-    if(!unvisitedNeighbours)
-        endStations.push_back(srcStation);
-
 }
 
 

@@ -100,30 +100,6 @@ double Station::getFlow() const {
     return flow;
 }
 
-/*void Station::removeTrack(const string &dest) {
-    vector<Station*> aux;
-    auto in = incoming.begin(), out = adj.begin();
-    while (out != adj.end()) {
-        Track *track = *out;
-        if (track->getDestination()->getName() == dest) {
-            aux.push_back(track->getSource());
-            adj.erase(out);
-            delete track;
-            break;
-        }
-        out++;
-    }
-    while (in != incoming.end()) {
-        Track *track = *in;
-        if (track->getSource()->getName() == dest) {
-            incoming.erase(in);
-            delete track;
-            break;
-        }
-        in++;
-    }
-}*/
-
 void Station::removeOutgoingTrack(const string &dest) {
     for (auto itr = adj.begin(); itr != adj.end(); itr++) {
         Track *track = *itr;

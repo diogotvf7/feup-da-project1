@@ -6,30 +6,11 @@ namespace FileReader {
         return c == ' ' || c == '"';
     }
 
-<<<<<<< HEAD
-void FileReader::readNetworks() {
-
-    ifstream csv(path + "network.csv");
-    string buffer;
-    getline(csv, buffer, '\n'); // Ignore Header
-
-    while(getline(csv, buffer)) {
-
-        string src, dest, capacity, service;
-        stringstream tmp(buffer);
-        getline(tmp, src, ',');
-        getline(tmp, dest, ',');
-        getline(tmp, capacity, ',');
-        getline(tmp, service, '\n');
-
-        graph->addBidirectionalTrack(strip(src), strip(dest), stoi(capacity), capitalizeFirstLetter(strip(service)));
-=======
     std::string capitalizeFirstLetter(const std::string &str) {
         std::string res = str;
         for (size_t i = 0; i < res.size(); i++)
             res[i] = i ? std::tolower(res[i]) : std::toupper(res[i]);
         return res;
->>>>>>> 47aef559d801082e1fdfc7f635f5f846b5143175
     }
 
     std::string strip(const std::string &str) {
@@ -90,4 +71,3 @@ void FileReader::readNetworks() {
         }
     }
 }
-

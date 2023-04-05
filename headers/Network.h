@@ -30,9 +30,11 @@ public:
      * */
     void edmondsKarp(const std::string &source, const std::string &dest);
     void edmondsKarp2(const std::string &source, const std::string &dest);
+    std::pair<int,int> edmondsKarpCost(const std::string &source, const std::string &dest);
     bool findAugmentingPath(Station* source, Station* dest);
     void testAndVisit(std::queue<Station*> &q, Track *t, Station* s, double residual);
     double findMinResidualAlongPath(Station* source, Station* dest);
+    std::pair<int,int> findMinResidualCostAlongPath(Station *source, Station *dest);
     void augmentFlowAlongPath(Station* source, Station* dest, double f);
 
     /*This function refers to exercise 2.2*/
@@ -46,6 +48,5 @@ public:
     double maxTrainsStation(Station* dest);
 
 };
-
 
 #endif //NETWORK_H

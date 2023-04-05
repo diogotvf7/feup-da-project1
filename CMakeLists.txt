@@ -13,8 +13,8 @@ add_executable(
         dataset/real-dataset/stations.csv
         dataset/test-dataset/network.csv
         dataset/test-dataset/stations.csv
-        headers/FileReader.h
-        source/FileReader.cpp
+        headers/Util.h
+        source/Util.cpp
         headers/StationTrack.h
         source/StationTrack.cpp
         headers/Network.h

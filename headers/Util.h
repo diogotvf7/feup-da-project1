@@ -8,13 +8,15 @@
 #include "Network.h"
 #include "StationTrack.h"
 
-namespace FileReader {
+namespace Util {
 
     bool discard(char c);
 
     std::string capitalizeFirstLetter(const std::string &str);
 
     std::string strip(const std::string &str);
+
+    std::vector<std::string> split(const std::string &str, char delimiter);
 
     void readStations(const std::string &path, Network *graph);
 

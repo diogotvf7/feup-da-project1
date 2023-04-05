@@ -1,6 +1,6 @@
-#include "../headers/FileReader.h"
+#include "../headers/Util.h"
 
-namespace FileReader {
+namespace Util {
 
     bool discard(char c) {
         return c == ' ' || c == '"';
@@ -20,6 +20,15 @@ namespace FileReader {
         while (discard(*lowerBound)) lowerBound++;
         while (discard(*upperBound)) upperBound--;
         return {lowerBound, upperBound};
+    }
+
+    std::vector<std::string> split(const std::string &str, char delimiter) {
+        std::vector<std::string> res;
+        std::string buffer;
+        std::stringstream tmp(str);
+        while (getline(tmp, buffer, delimiter))
+            res.push_back(buffer);
+        return res;
     }
 
     void readStations(const std::string &path, Network *graph) {

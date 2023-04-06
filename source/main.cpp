@@ -13,16 +13,17 @@ int main () {
     /* ########################################### */
     /*          Structures initialization          */
 
-    NetworkManager nm;
-    Network *real_network = nm.createGraph("dataset/real-dataset/");
+    /*
+    // NetworkManager nm;
+    //Network *real_network = nm.createGraph("dataset/real-dataset/");
     // Network *test_network = nm.createGraph("dataset/test-dataset/");
-
+    */
     /* ########################################### */
-    /*          Max Flow Min Cost                  */
-    
+    /*          Max Flow Min Cost
+
     pair<int,int> p = real_network->edmondsKarpCost("Porto Campanhã","Lisboa Oriente");
     cout << "Flow is " << p.first << " cost is " << p.second << endl;
-
+    */
     /*##############################################*/
     /*              Real Top Max Flow              */
 

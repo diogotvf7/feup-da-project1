@@ -117,7 +117,6 @@ bool Network::findAugmentingPath(Station *source, Station *dest) {
 double Network::findMinResidualAlongPath(Station *source, Station *dest) {
     double f = INT16_MAX;
     int cost = 0;
-    cout << "cost is " << cost << endl;
     for (auto v = dest; v != source; ) {
         auto e = v->getPath();
         if (e->getDestination() == v) {
@@ -130,7 +129,6 @@ double Network::findMinResidualAlongPath(Station *source, Station *dest) {
         }
         cost += e->getService() == "STANDARD" ? 4 : 2;
     }
-    cout << "cost is: " << cost << " and flow is: " << f << endl;
     return f;
 }
 

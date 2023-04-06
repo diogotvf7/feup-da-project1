@@ -12,8 +12,8 @@ add_executable(
         dataset/real-dataset/stations.csv
         dataset/test-dataset/network.csv
         dataset/test-dataset/stations.csv
-        headers/FileReader.h
-        source/FileReader.cpp
+        headers/Util.h
+        source/Util.cpp
         headers/StationTrack.h
         source/StationTrack.cpp
         headers/Network.h
@@ -21,4 +21,4 @@ add_executable(
         headers/NetworkManager.h
         source/NetworkManager.cpp
         source/main.cpp
-        headers/Menu.h source/Menu.cpp)
+        headers/Menu.h source/Menu.cpp Test.cpp main.cpp)

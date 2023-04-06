@@ -34,24 +34,27 @@ namespace NetworkManager {
     }
 
     vector<Station *> topAffectedStations(Network *normalNetwork, Network *reducedNetwork, int n) {
-
-        vector<Station *> res;
         unordered_map<string, double> realMaxFlow, reducedMaxFlow, diff;
-        vector<Station *> stationSet = normalNetwork->getStationsSet(), reducedStationSet = reducedNetwork->getStationsSet();
+        vector<Station*> res, stationSet = normalNetwork->getStationsSet(), reducedStationSet = reducedNetwork->getStationsSet();
+        double cases = (double) (pow(normalNetwork->getNumStations(), 2) - normalNetwork->getNumStations()) / 2 +
+                (pow(reducedNetwork->getNumStations(), 2) - reducedNetwork->getNumStations()) / 2;
+        double calculatedCases = 0;
+        int percentage = 0;
 
         for (int i = 0; i < normalNetwork->getNumStations(); i++) {
             Station *src = stationSet[i];
             for (int j = i; j < normalNetwork->getNumStations(); j++) {
                 Station *dest = stationSet[j];
-                string revKey =
-                        dest->getName() + "/" + src->getName();                             // Check if reverse pair
-                // TODO: is Checking reverse pair really needed?
-                if (src == dest || realMaxFlow.find(revKey) != realMaxFlow.end()) continue;     //  already exists
+                if (src == dest) continue;
                 normalNetwork->edmondsKarp(src, dest);
+                if (percentage < round(calculatedCases++ / cases * 100)) {
+                    percentage = (int) round(calculatedCases / cases * 100);
+                    Util::cleanTerminal();
+                    Util::printLoadingBar(percentage, "Calculating max flow between the original network stations");
+                }
                 double flow = dest->getFlow();
                 string key = src->getName() + "/" + dest->getName();
                 realMaxFlow.emplace(key, flow);
-
             }
         }
 
@@ -59,11 +62,13 @@ namespace NetworkManager {
             Station *src = reducedStationSet[i];
             for (int j = i; j < reducedNetwork->getNumStations(); j++) {
                 Station *dest = reducedStationSet[j];
-                string revKey =
-                        dest->getName() + "/" + src->getName();                             // Check if reverse pair
-                        // TODO: is Checking reverse pair really needed?
-                if (src == dest || reducedMaxFlow.find(revKey) != reducedMaxFlow.end()) continue;     //  already exists
+                if (src == dest) continue;     //  already exists
                 reducedNetwork->edmondsKarp(src, dest);
+                if (percentage < round(calculatedCases++ / cases * 100)) {
+                    percentage = (int) round(calculatedCases / cases * 100);
+                    Util::cleanTerminal();
+                    Util::printLoadingBar(percentage, "Calculating max flow between the reduced network stations");
+                }
                 double flow = dest->getFlow();
                 string key = src->getName() + "/" + dest->getName();
                 reducedMaxFlow.emplace(key, flow);

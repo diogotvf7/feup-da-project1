@@ -16,9 +16,15 @@ namespace Util {
         return res;
     }
 
-    void printLoadingBar(int percentage) {
-        std::cout << std::setw(70) << " " << "[" << std::setw(50 + percentage - percentage % 2) << std::left << repeat("▇", percentage / 2) << "]" << std::endl;
-        std::cout << Util::center(std::to_string(percentage) + "%", 190) << std::endl;
+    void printLoadingBar(int percentage, const std::string &message) {
+        int leftPadding = ((int) message.size() - 46) / 2, rightPadding = ((int) message.size() - 45) / 2;
+        std::cout << center(repeat("-", (int) message.size() + 8), 213) << std::endl;
+        std::cout << center("|   " + message + "   |", 213) << std::endl;
+        std::cout << center("|" + repeat(" ", leftPadding) + "This task takes some time processing... Please hold!" + repeat(" ", rightPadding) + "|", 213) << std::endl;
+        std::cout << center(repeat("-", (int) message.size() + 8), 213) << std::endl;
+        std::cout << std::endl << std::endl;
+        std::cout << std::setw(80) << " " << "[" << std::setw(50 + percentage - percentage % 2) << std::left << repeat("▇", percentage / 2) << "]" << std::endl;
+        std::cout << center(std::to_string(percentage) + "%", 213) << std::endl;
     }
 
     std::string normalise(const std::string &s) {

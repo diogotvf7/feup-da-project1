@@ -207,21 +207,19 @@ void Network::edmondsKarp(Station *source, Station *dest) {
 pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
     vector<pair<string,string>> ans;
     vector<pair<string,string>> analysedCases;
-    double maxFlow = 0;
-    double cases = (double) (stationsSet.size()*(stationsSet.size() - 1))/2;
-    double calculatedCases = 0;
+    double maxFlow = 0, calculatedCases = 0, cases = (double) (stationsSet.size()*(stationsSet.size() - 1))/2;
     int percentage = 0;
+
     for (size_t i = 0; i != stationsSet.size(); i++) {
         for (size_t j = i; j != stationsSet.size(); j++) {
             Station* src = stationsSet[i];
             Station* dest = stationsSet[j];
             if (src == dest) continue;
             edmondsKarp(src, dest);
-            calculatedCases++;
-            if (percentage < round(((calculatedCases/cases) * 100))){
-                percentage = (int) round(((calculatedCases/cases) * 100));
+            if (percentage < round(calculatedCases++ / cases * 100)) {
+                percentage = (int) round(calculatedCases / cases * 100);
                 Util::cleanTerminal();
-                Util::printLoadingBar(percentage);
+                Util::printLoadingBar(percentage, "Calculating max flow between all pairs of stations...");
             }
             double flow = dest->getFlow();
             if (flow < maxFlow) continue;

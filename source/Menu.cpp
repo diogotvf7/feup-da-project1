@@ -50,20 +50,9 @@ void Menu::mainMenu() {
 
     while (true) {
         cout << "   - OPTION: ";
-        cin >> input;
-        try {
-            int inputNum = stoi(input);
-            if (1 <= inputNum && inputNum <= 10) {
-                // Valid input
-                break;
-            } else {
-                cout << "   - INVALID OPTION" << endl;
-            }
-        } catch (const std::invalid_argument&) {
-            cout << "   - INVALID OPTION" << endl;
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+        getline(cin >> ws, input);
+        if (Util::isNumerical(input) && 1 <= stoi(input) && stoi(input) <= 10) break;
+        else cout << "   - INVALID OPTION" << endl;
     }
 }
 
@@ -85,54 +74,43 @@ void Menu::exercise_2_1() {
              << Util::center("This means that between the two stations there can be a maximum number of " + to_string(result) + " trains.", 188)
              << endl
              << string(190, '_') << endl
-             << '|' << Util::center("TYPE 0 TO GO TO THE MAIN MENU", 188) << '|' << endl
+             << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl;
         while (true) {
-            cout << "Type 0: ";
-            cin >> input;
-            try {
-                int inputNum = stoi(input);
-                if (inputNum == 0) {
-                    // Valid input
-                    break;
-                } else {
-                    cout << "   - INVALID OPTION" << endl;
-                }
-            } catch (const std::invalid_argument&) {
-                cout << "   - INVALID OPTION" << endl;
-                cin.clear();
-                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            }
+            cout << "   - OPTION: ";
+            getline(cin >> ws, input);
+            cout << endl;
+            if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+            else cout << "   - INVALID OPTION" << endl;
         }
     }
 }
 
 void Menu::exercise_2_2() {
-    std::pair<double,std::vector<std::pair<std::string,std::string>>> res = network->topMaxFlow();
-    double MaxFlow = res.first;
+    std::pair<int,std::vector<std::pair<std::string,std::string>>> res = network->topMaxFlow();
+    int MaxFlow = res.first;
     std::vector<std::pair<std::string,std::string>> v = res.second;
-    cout << "When taking into consideration the full network capacity, the most amount of trains required by a pair of stations is: " << MaxFlow << " " << endl;
-    cout << "The pair(s) of stations that require this amount is/are: "<< endl;
-    int i = 1;
-    for (const auto &p : v) {
-        cout << i++ << ". " << p.first << "->" << p.second << endl;
-    }
+    Util::cleanTerminal();
+    cout << string(190, '_') << endl
+         << '|' << Util::center("Top max flow", 188) << '|' << endl
+         << '|' << Util::center("This function calculates the max flow between all pairs of stations and", 188) << '|' << endl
+         << '|' << Util::center("returns all the pairs that have the maximum max flow value.", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl
+         << endl
+         << Util::center("The calculated result is: " + to_string(MaxFlow), 188) << endl
+         << Util::center("The pair(s) of stations that have this max flow are:", 188) << endl;
+    for (int i = 1; i <= v.size(); i++)
+        cout << Util::center(to_string(i) + ". " + v[i - 1].first + " -> " + v[i-1].second, 190) << endl;
+    cout << endl;
+    cout << string(190, '_') << endl
+         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "\n\n" << "Want to go back to the menu? Type 0: ";
-        cin >> input;
-        try {
-            int inputNum = stoi(input);
-            if (inputNum == 0) {
-                // Valid input
-                break;
-            } else {
-                cout << "   - INVALID OPTION" << endl;
-            }
-        } catch (const std::invalid_argument&) {
-            cout << "   - INVALID OPTION" << endl;
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+        cout << "   - OPTION: ";
+        getline(cin >> ws, input);
+        cout << endl;
+        if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+        else cout << "   - INVALID OPTION" << endl;
     }
 
 
@@ -259,7 +237,8 @@ void Menu::manageNetworks() {
 
 void Menu::runTests() {
     // TODO
-
+    // Corre os testes em Test.cpp
+    // Conseguir escolher que testes correr??
 }
 
 Station *Menu::listStations(Network *nw, const string &message, Station *ignoreStation) {
@@ -295,7 +274,7 @@ Station *Menu::listStations(Network *nw, const string &message, Station *ignoreS
              << '|' << string(188, '_') << '|' << endl;
 
         while (true) {
-            cout << "   - OPTION: " << std::flush;;
+            cout << "   - OPTION: ";
             getline(cin >> ws, input);
             cout << endl;
             string tmp = input;

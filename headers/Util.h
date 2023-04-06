@@ -12,6 +12,8 @@ namespace Util {
 
     bool discard(char c);
 
+    std::string center(std::string str, int width);
+
     std::string capitalizeFirstLetter(const std::string &str);
 
     std::string strip(const std::string &str);

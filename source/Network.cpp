@@ -1,3 +1,4 @@
+#include <cmath>
 #include "headers/Network.h"
 
 using namespace std;
@@ -241,23 +242,34 @@ void Network::edmondsKarp2(const string &source, const string &dest) {
  }
 
 
-pair<double,vector<pair<Station*,Station*>>> Network::topMaxFlow() {
-    vector<pair<Station*,Station*>> ans;
+pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
+    vector<pair<string,string>> ans;
+    vector<pair<string,string>> analysedCases;
     double maxFlow = 0;
-
-    for (Station *src : stationsSet) {
-        for (Station *dest : stationsSet) {
+    double cases = (double) (stationsSet.size()*(stationsSet.size() - 1))/2;
+    double calculatedCases = 0;
+    double percentage = 0;
+    for (size_t i = 0; i != stationsSet.size(); i++) {
+        for (size_t j = i; j != stationsSet.size(); j++) {
+            Station* src = stationsSet[i];
+            Station* dest = stationsSet[j];
             if (src == dest) continue;
             edmondsKarp(src->getName(), dest->getName());
+            calculatedCases++;
+            if (percentage < round(((calculatedCases/cases) * 100))){
+                percentage = round(((calculatedCases/cases) * 100));
+                cout << percentage << "% done" << endl;
+            }
             double flow = dest->getFlow();
             if (flow < maxFlow) continue;
             if (flow > maxFlow) {
                 maxFlow = flow;
                 ans.clear();
             }
-            ans.emplace_back(src, dest);
+            ans.emplace_back(src->getName(), dest->getName());
         }
     }
+
     return {maxFlow, ans};
 }
 

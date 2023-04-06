@@ -38,7 +38,7 @@ public:
     void augmentFlowAlongPath(Station* source, Station* dest, double f);
 
     /*This function refers to exercise 2.2*/
-    std::pair<double,std::vector<std::pair<Station*,Station*>>> topMaxFlow();
+    std::pair<double,std::vector<std::pair<std::string,std::string>>> topMaxFlow();
 
     /*This function refers to exercise 2.3*/
     std::vector<std::pair<std::string, double>>topTransportationNeeds(std::string location);

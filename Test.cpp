@@ -22,9 +22,9 @@ void realTopMaxFlow() {
     Network *real_network = NetworkManager::createGraph("../dataset/real-dataset/");
 
     cout << "Real Top Max Flow" << endl;
-    pair<double,vector<pair<Station*,Station*>>> tmf = real_network->topMaxFlow();
+    pair<double,vector<pair<string,string>>> tmf = real_network->topMaxFlow();
     for (auto &i : tmf.second)
-        cout << i.first->getName() << " | " << i.second->getName() << " | " << tmf.first << endl;
+        cout << i.first << " | " << i.second << " | " << tmf.first << endl;
     cout << endl;
 
     NetworkManager::deleteGraph(real_network);

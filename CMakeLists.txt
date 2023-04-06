@@ -20,5 +20,4 @@ add_executable(
         source/Network.cpp
         headers/NetworkManager.h
         source/NetworkManager.cpp
-        source/main.cpp
         headers/Menu.h source/Menu.cpp Test.cpp main.cpp)

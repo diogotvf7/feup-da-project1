@@ -2,9 +2,11 @@
 #define FEUP_DA_PROJECT_MENU_H
 
 #include <iostream>
+#include <iomanip>
 #include <unordered_map>
 
 #include "Network.h"
+#include "Util.h"
 
 class Menu {
     Network *network;
@@ -23,6 +25,7 @@ public:
     void exercise_4_2();
     void manageNetworks();
     void runTests();
+    Station *listStations(Network *nw, std::string message);
     void cleanTerminal();
 };
 

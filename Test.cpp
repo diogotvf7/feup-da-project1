@@ -6,10 +6,12 @@
 using namespace std;
 
 void edmondsKarpCostTest() {
-    Network *real_network = NetworkManager::createGraph("../dataset/real-dataset/");
+    Network *real_network = NetworkManager::createGraph("dataset/real-dataset/");
 
     cout << "Edmonds Karp Cost Test" << endl;
-    pair<int,int> p = real_network->edmondsKarpCost("Porto Campanhã","Lisboa Oriente");
+    Station* src = real_network->findStation("Porto Campanhã");
+    Station* dest = real_network->findStation("Lisboa Oriente");
+    pair<int,int> p = real_network->edmondsKarpCost(src,dest);
     cout << "[Porto Campanhã -> Lisboa Oriente]" << endl;
     cout << "Flow: " << p.first << endl;
     cout << "Cost: " << p.second << endl;
@@ -19,7 +21,7 @@ void edmondsKarpCostTest() {
 }
 
 void realTopMaxFlow() {
-    Network *real_network = NetworkManager::createGraph("../dataset/real-dataset/");
+    Network *real_network = NetworkManager::createGraph("dataset/real-dataset/");
 
     cout << "Real Top Max Flow" << endl;
     pair<double,vector<pair<string,string>>> tmf = real_network->topMaxFlow();
@@ -31,8 +33,8 @@ void realTopMaxFlow() {
 }
 
 void testReducedConnectivity01() {
-    Network *test_network = NetworkManager::createGraph("../dataset/test-dataset/");
-    Network *test_network_reduced = NetworkManager::createGraph("../dataset/test-dataset/");
+    Network *test_network = NetworkManager::createGraph("dataset/test-dataset/");
+    Network *test_network_reduced = NetworkManager::createGraph("dataset/test-dataset/");
     vector<string> reduceStations = {"Ermidas-Sado"};
     tracks_vector reduceTracks = {};
     NetworkManager::reduceConnectivity(test_network_reduced, reduceTracks, reduceStations);
@@ -49,8 +51,8 @@ void testReducedConnectivity01() {
 }
 
 void testReducedConnectivity02() {
-    Network *test_network = NetworkManager::createGraph("../dataset/test-dataset/");
-    Network *test_network_reduced = NetworkManager::createGraph("../dataset/test-dataset/");
+    Network *test_network = NetworkManager::createGraph("dataset/test-dataset/");
+    Network *test_network_reduced = NetworkManager::createGraph("dataset/test-dataset/");
     vector<string> reduceStations = {"Faro", "Porto Campanhã"};
     tracks_vector reduceTracks = {};
     NetworkManager::reduceConnectivity(test_network_reduced, reduceTracks, reduceStations);
@@ -67,8 +69,8 @@ void testReducedConnectivity02() {
 }
 
 void testReducedConnectivity03() {
-    Network *test_network = NetworkManager::createGraph("../dataset/test-dataset/");
-    Network *test_network_reduced = NetworkManager::createGraph("../dataset/test-dataset/");
+    Network *test_network = NetworkManager::createGraph("dataset/test-dataset/");
+    Network *test_network_reduced = NetworkManager::createGraph("dataset/test-dataset/");
     vector<string> reduceStations = {};
     tracks_vector reduceTracks = {{"Ermidas-Sado", "Faro"}, {"Ermidas-Sado", "Porto Campanhã"}};
     NetworkManager::reduceConnectivity(test_network_reduced, reduceTracks, reduceStations);
@@ -86,7 +88,7 @@ void testReducedConnectivity03() {
 }
 
 void testMaxTrainStations01() {
-    Network *test_network = NetworkManager::createGraph("../dataset/test-dataset/");
+    Network *test_network = NetworkManager::createGraph("dataset/test-dataset/");
 
     cout << "Test max trains arriving at station 01" << endl;
     Station *porto = test_network->findStation("Porto Campanhã");
@@ -101,7 +103,7 @@ void testMaxTrainStations01() {
 }
 
 void testMaxTrainStations02() {
-    Network *real_network = NetworkManager::createGraph("../dataset/real-dataset/");
+    Network *real_network = NetworkManager::createGraph("dataset/real-dataset/");
 
     cout << "Test max trains arriving at station 02" << endl;
     Station *porto = real_network->findStation("Porto Campanhã");
@@ -116,8 +118,8 @@ void testMaxTrainStations02() {
 }
 
 void testTopAffectedStations01() {
-    Network *network = NetworkManager::createGraph("../dataset/test-dataset-2/");
-    Network *network_reduced = NetworkManager::createGraph("../dataset/test-dataset-2/");
+    Network *network = NetworkManager::createGraph("dataset/test-dataset-2/");
+    Network *network_reduced = NetworkManager::createGraph("dataset/test-dataset-2/");
     vector<Station*> topAffectedStations;
     vector<string> reduceStations = {"ST10"};
     tracks_vector reduceTracks = {};
@@ -134,8 +136,8 @@ void testTopAffectedStations01() {
 }
 
 void testTopAffectedStations02() {
-    Network *network = NetworkManager::createGraph("../dataset/test-simple-dataset/");
-    Network *network_reduced = NetworkManager::createGraph("../dataset/test-simple-dataset/");
+    Network *network = NetworkManager::createGraph("dataset/test-simple-dataset/");
+    Network *network_reduced = NetworkManager::createGraph("dataset/test-simple-dataset/");
     vector<Station*> topAffectedStations;
     vector<string> reduceStations = {"ST02"};
     tracks_vector reduceTracks = {};
@@ -152,8 +154,8 @@ void testTopAffectedStations02() {
 }
 
 void testTopAffectedStations03() {
-    Network *network = NetworkManager::createGraph("../dataset/real-dataset/");
-    Network *network_reduced = NetworkManager::createGraph("../dataset/real-dataset/");
+    Network *network = NetworkManager::createGraph("dataset/real-dataset/");
+    Network *network_reduced = NetworkManager::createGraph("dataset/real-dataset/");
     vector<Station*> topAffectedStations;
     vector<string> reduceStations = {"Porto Campanhã", "Lisboa Oriente", "Aveiro - Vouga", "Coimbra B", "Coimbra", "Faro", "Ermidas-Sado"};
     tracks_vector reduceTracks = {{"São Romão - A","São Romão"}, {"Pala","Mosteirô"}, {"Loulé","Almancil"}};

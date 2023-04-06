@@ -20,7 +20,7 @@ namespace Util {
 
     std::string repeat(const std::string &str, int times);
 
-    void printLoadingBar(int percentage);
+    void printLoadingBar(int percentage, const std::string& message);
 
     std::string normalise(const std::string &s);
 

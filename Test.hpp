@@ -1,3 +1,6 @@
+#ifndef TEST_H
+#define TEST_H
+
 #include <iostream>
 
 #include "headers/Network.h"
@@ -181,3 +184,5 @@ void run() {
     testTopAffectedStations02();
     testTopAffectedStations03();
 }
+
+#endif //TEST_H

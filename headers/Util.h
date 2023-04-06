@@ -1,6 +1,8 @@
 #ifndef FILEREADER_H
 #define FILEREADER_H
 
+#include <iostream>
+#include <iomanip>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -15,6 +17,8 @@ namespace Util {
     bool discard(char c);
 
     void cleanTerminal();
+
+    std::string repeat(const std::string &str, int times);
 
     void printLoadingBar(int percentage);
 

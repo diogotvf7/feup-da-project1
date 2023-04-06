@@ -17,8 +17,8 @@ public:
     bool addStation(Station* station);
     void removeTrack(const std::string src, const std::string dest);
     void removeStation(const std::string &name);
-    bool addTrack(const std::string &sourc, const std::string &dest, double capacity,const std::string &service);
-    bool addBidirectionalTrack(const std::string &source,const std::string &dest, double capacity, const std::string &service);
+    bool addTrack(const std::string &source, const std::string &dest, double capacity,const std::string &service);
+    bool addBidirectionalTrack(const std::string &source, const std::string &dest, int capacity, const std::string &service);
     int getNumStations() const;
     [[nodiscard]] std::vector<Track*> getTracksSet() const;
     [[nodiscard]] std::vector<Station*> getStationsSet() const;

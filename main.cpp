@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <csignal>
 
 #include "headers/Menu.h"
 #include "headers/Network.h"

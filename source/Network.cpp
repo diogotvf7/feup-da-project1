@@ -3,11 +3,9 @@
 using namespace std;
 
 Station* Network::findStation(const string &stationName) const {
-    for (Station* station : stationsSet) {
-        if (station->getName() == stationName) {
+    for (Station* station : stationsSet)
+        if (station->getName() == stationName)
             return station;
-        }
-    }
     return nullptr;
 }
 
@@ -19,8 +17,8 @@ bool Network::addStation(Station* station) {
     return false;
 }
 
-bool Network::addTrack(const string &sourc, const string &dest, double capacity, const string &service) {
-    auto v1 = findStation(sourc);
+bool Network::addTrack(const string &source, const string &dest, double capacity, const string &service) {
+    auto v1 = findStation(source);
     auto v2 = findStation(dest);
     if (v1 == nullptr || v2 == nullptr)
         return false;
@@ -28,13 +26,11 @@ bool Network::addTrack(const string &sourc, const string &dest, double capacity,
     return true;
 }
 
-bool Network::addBidirectionalTrack(const string &source, const string &dest, double capacity, const string &service) {
+bool Network::addBidirectionalTrack(const string &source, const string &dest, int capacity, const string &service) {
 
     Station* s1 = findStation(source);
     Station* s2 = findStation(dest);
-    if (s1 == nullptr || s2 == nullptr) {
-        return false;
-    }
+    if (s1 == nullptr || s2 == nullptr) return false;
     Track* t1 = s1->addTrack(s2, capacity, service);
     Track* t2 = s2->addTrack(s1, capacity, service);
     t1->setReverse(t2);
@@ -197,7 +193,6 @@ void Network::augmentFlowAlongPath(Station *source, Station *dest, double f) {
 void Network::edmondsKarp(Station *source, Station *dest) {
     if (source == nullptr || dest == nullptr || source == dest)
         throw logic_error("Invalid source and/or target vertex");
-
 
     for (Station *station: stationsSet)
         for (Track *track: station->getAdj())

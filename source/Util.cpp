@@ -10,9 +10,14 @@ namespace Util {
         std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
     }
 
+    std::string repeat(const std::string &str, int times) {
+        std::string res;
+        for (int i = 0; i < times; i++) res += str;
+        return res;
+    }
+
     void printLoadingBar(int percentage) {
-        // TODO dar fix a este perigosissimo problema de memória que começa a dar print a código em vez dos retangulos
-        std::cout << Util::center("[" + std::string("▇", percentage) + "]", 190) << std::endl;
+        std::cout << std::setw(70) << " " << "[" << std::setw(50 + percentage - percentage % 2) << std::left << repeat("▇", percentage / 2) << "]" << std::endl;
         std::cout << Util::center(std::to_string(percentage) + "%", 190) << std::endl;
     }
 

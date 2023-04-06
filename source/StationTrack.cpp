@@ -163,7 +163,7 @@ Track *Track::getReverse() const {
     return reverse;
 }
 
-double Track::getFlow() const {
+int Track::getFlow() const {
     return flow;
 }
 
@@ -179,7 +179,7 @@ void Track::setReverse(Track *reverse) {
     this->reverse = reverse;
 }
 
-void Track::setFlow(double flow) {
+void Track::setFlow(int flow) {
     this->flow = flow;
 }
 

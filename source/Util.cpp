@@ -6,6 +6,34 @@ namespace Util {
         return c == ' ' || c == '"';
     }
 
+    void cleanTerminal() {
+        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+    }
+
+    void printLoadingBar(int percentage) {
+        // TODO dar fix a este perigosissimo problema de memória que começa a dar print a código em vez dos retangulos
+        std::cout << Util::center("[" + std::string("▇", percentage) + "]", 190) << std::endl;
+        std::cout << Util::center(std::to_string(percentage) + "%", 190) << std::endl;
+    }
+
+    std::string normalise(const std::string &s) {
+        std::string lowerS;
+        for (char c : s) lowerS += tolower(c);
+        return lowerS;
+    }
+
+    bool isNumerical(const std::string &str) {
+        for (char c : str)
+            if (!isdigit(c)) return false;
+        return true;
+    }
+
+    bool isAlpha(const std::string &str) {
+        for (char c : str)
+            if (!isalpha(c)) return false;
+        return true;
+    }
+
     std::string center(std::string str, int width) {
         int padding = width - str.size();
         int leftPadding = padding / 2;
@@ -39,9 +67,6 @@ namespace Util {
     }
 
     void readStations(const std::string &path, Network *graph) {
-
-        std::vector<int> maxmax(5, 0);
-
         std::ifstream csv(path + "stations.csv");
         std::string buffer;
         getline(csv, buffer, '\n'); // Ignore Header
@@ -63,19 +88,10 @@ namespace Util {
             getline(tmp, line, ',');
             getline(tmp, line, '\n');
 
-            maxmax[0] = maxmax[0] > name.size() ? maxmax[0] : (int) name.size();
-            maxmax[1] = maxmax[1] > district.size() ? maxmax[1] : (int) district.size();
-            maxmax[2] = maxmax[2] > municipality.size() ? maxmax[2] : (int) municipality.size();
-            maxmax[3] = maxmax[3] > township.size() ? maxmax[3] : (int) township.size();
-            maxmax[4] = maxmax[4] > line.size() ? maxmax[4] : (int) line.size();
-
             graph->addStation(new Station(strip(name), capitalizeFirstLetter(strip(district)),
                                           capitalizeFirstLetter(strip(municipality)), strip(township),
                                           capitalizeFirstLetter(strip(line))));
         }
-
-        for (int i = 0; i < 5; i++)
-            std::cout << maxmax[i] << " ";
     }
 
     void readNetwork(const std::string &path, Network *graph) {

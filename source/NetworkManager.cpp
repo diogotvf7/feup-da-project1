@@ -24,10 +24,9 @@ namespace NetworkManager {
         return network;
     }
 
-    double maxFlowBetween(Network *network, const string &source, const string &target) {
+    int maxFlowBetween(Network *network, Station *source, Station *target) {
         network->edmondsKarp(source, target);
-        Station *station = network->findStation(target);
-        return station->getFlow();
+        return target->getFlow();
     }
 
     void deleteGraph(Network *network) {
@@ -46,8 +45,9 @@ namespace NetworkManager {
                 Station *dest = stationSet[j];
                 string revKey =
                         dest->getName() + "/" + src->getName();                             // Check if reverse pair
+                // TODO: is Checking reverse pair really needed?
                 if (src == dest || realMaxFlow.find(revKey) != realMaxFlow.end()) continue;     //  already exists
-                normalNetwork->edmondsKarp(src->getName(), dest->getName());
+                normalNetwork->edmondsKarp(src, dest);
                 double flow = dest->getFlow();
                 string key = src->getName() + "/" + dest->getName();
                 realMaxFlow.emplace(key, flow);
@@ -61,8 +61,9 @@ namespace NetworkManager {
                 Station *dest = reducedStationSet[j];
                 string revKey =
                         dest->getName() + "/" + src->getName();                             // Check if reverse pair
+                        // TODO: is Checking reverse pair really needed?
                 if (src == dest || reducedMaxFlow.find(revKey) != reducedMaxFlow.end()) continue;     //  already exists
-                reducedNetwork->edmondsKarp(src->getName(), dest->getName());
+                reducedNetwork->edmondsKarp(src, dest);
                 double flow = dest->getFlow();
                 string key = src->getName() + "/" + dest->getName();
                 reducedMaxFlow.emplace(key, flow);

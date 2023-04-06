@@ -14,7 +14,7 @@
 namespace NetworkManager {
     void reduceConnectivity(Network *network, const tracks_vector &tracks, const std::vector<std::string> &stations);
     Network *createGraph(const std::string &datasetPath);
-    double maxFlowBetween(Network *network, const std::string &source, const std::string &target);
+    int maxFlowBetween(Network *network, Station *source, Station *target);
     std::vector<Station*> topAffectedStations(Network *normalNetwork, Network *reducedNetwork, int n);
     void deleteGraph(Network *network);
 };

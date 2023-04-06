@@ -8,9 +8,21 @@
 #include "Network.h"
 #include "StationTrack.h"
 
+class Network;
+
 namespace Util {
 
     bool discard(char c);
+
+    void cleanTerminal();
+
+    void printLoadingBar(int percentage);
+
+    std::string normalise(const std::string &s);
+
+    bool isNumerical(const std::string &str);
+
+    bool isAlpha(const std::string &str);
 
     std::string center(std::string str, int width);
 

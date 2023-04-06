@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <unordered_map>
 
+#include "NetworkManager.h"
 #include "Network.h"
 #include "Util.h"
 
@@ -25,8 +26,7 @@ public:
     void exercise_4_2();
     void manageNetworks();
     void runTests();
-    Station *listStations(Network *nw, std::string message);
-    void cleanTerminal();
+    Station *listStations(Network *nw, const std::string &message, Station *ignore = nullptr);
 };
 
 

@@ -88,12 +88,12 @@ public:
     [[nodiscard]] bool isSelected() const;
     [[nodiscard]] Station *getSource() const;
     [[nodiscard]] Track *getReverse() const;
-    [[nodiscard]] double getFlow() const;
+    [[nodiscard]] int getFlow() const;
     [[nodiscard]] std::string getService() const;
 
     void setSelected(bool selected);
     void setReverse(Track* reverse);
-    void setFlow(double flow);
+    void setFlow(int flow);
     void setService(const std::string &service);
 };
 

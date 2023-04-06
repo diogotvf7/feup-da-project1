@@ -1,15 +1,14 @@
 #ifndef NETWORK_H
 #define NETWORK_H
 
-#include <thread>
+#include <cmath>
 #include <utility>
 #include <algorithm>
 #include <vector>
 #include <queue>
-#include <set>
-#include <map>
 
 #include "StationTrack.h"
+#include "Util.h"
 
 class Network {
     std::vector<Station*> stationsSet;
@@ -28,12 +27,12 @@ public:
      * EdmondsKarp algorithm and its auxiliary functions
      * This functions refer to exercise 2.1
      * */
-    void edmondsKarp(const std::string &source, const std::string &dest);
+    void edmondsKarp(Station *source, Station *dest);
     void edmondsKarp2(const std::string &source, const std::string &dest);
     std::pair<int,int> edmondsKarpCost(const std::string &source, const std::string &dest);
     bool findAugmentingPath(Station* source, Station* dest);
     void testAndVisit(std::queue<Station*> &q, Track *t, Station* s, double residual);
-    double findMinResidualAlongPath(Station* source, Station* dest);
+    int findMinResidualAlongPath(Station* source, Station* dest);
     std::pair<int,int> findMinResidualCostAlongPath(Station *source, Station *dest);
     void augmentFlowAlongPath(Station* source, Station* dest, double f);
 

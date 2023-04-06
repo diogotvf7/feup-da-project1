@@ -40,9 +40,9 @@ void testReducedConnectivity01() {
     cout << "Test reduced connectivity 01" << endl;
     cout << "[Lisboa Oriente -> Porto Campanhã]" << endl;
     cout << "Max Flow under normal circumstances: "
-         << NetworkManager::maxFlowBetween(test_network, "Lisboa Oriente", "Porto Campanhã") << endl;
+         << NetworkManager::maxFlowBetween(test_network, test_network->findStation("Lisboa Oriente"), test_network->findStation("Porto Campanhã")) << endl;
     cout << "Max Flow in reduced connectivity circumstances: "
-         << NetworkManager::maxFlowBetween(test_network_reduced, "Lisboa Oriente", "Porto Campanhã") << endl;
+         << NetworkManager::maxFlowBetween(test_network_reduced, test_network_reduced->findStation("Lisboa Oriente"), test_network_reduced->findStation("Porto Campanhã")) << endl;
     cout << endl;
 
     NetworkManager::deleteGraph(test_network_reduced);
@@ -58,8 +58,8 @@ void testReducedConnectivity02() {
     cout << "Test reduced connectivity 02 (Cutting stations)" << endl;
     cout << "[Lisboa Oriente -> Porto Campanhã]" << endl;
     NetworkManager::reduceConnectivity(test_network_reduced, reduceTracks, reduceStations);
-    cout << "Max Flow in normal circumstances: " << NetworkManager::maxFlowBetween(test_network, "Lisboa Oriente", "Porto Campanhã") << endl;
-    cout << "Max Flow in reduced connectivity: " << NetworkManager::maxFlowBetween(test_network_reduced, "Lisboa Oriente", "Ermidas-Sado") << endl;
+    cout << "Max Flow in normal circumstances: " << NetworkManager::maxFlowBetween(test_network, test_network->findStation("Lisboa Oriente"), test_network->findStation("Porto Campanhã")) << endl;
+    cout << "Max Flow in reduced connectivity: " << NetworkManager::maxFlowBetween(test_network_reduced, test_network_reduced->findStation("Lisboa Oriente"), test_network_reduced->findStation("Ermidas-Sado")) << endl;
     cout << endl;
 
     NetworkManager::deleteGraph(test_network);
@@ -77,8 +77,8 @@ void testReducedConnectivity03() {
     cout << "Test reduced connectivity 03 (Cutting tracks)" << endl;
 
     NetworkManager::reduceConnectivity(test_network_reduced, reduceTracks, reduceStations);
-    cout << "Max Flow in normal circumstances: " << NetworkManager::maxFlowBetween(test_network, "Lisboa Oriente", "Porto Campanhã") << endl;
-    cout << "Max Flow in reduced connectivity (cutting tracks): " << NetworkManager::maxFlowBetween(test_network_reduced, "Lisboa Oriente", "Ermidas-Sado") << endl;
+    cout << "Max Flow in normal circumstances: " << NetworkManager::maxFlowBetween(test_network, test_network->findStation("Lisboa Oriente"), test_network->findStation("Porto Campanhã")) << endl;
+    cout << "Max Flow in reduced connectivity (cutting tracks): " << NetworkManager::maxFlowBetween(test_network_reduced, test_network_reduced->findStation("Lisboa Oriente"), test_network_reduced->findStation("Ermidas-Sado")) << endl;
     cout << endl;
 
     NetworkManager::deleteGraph(test_network);

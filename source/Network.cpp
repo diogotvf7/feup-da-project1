@@ -1,4 +1,3 @@
-#include <cmath>
 #include "headers/Network.h"
 
 using namespace std;
@@ -115,8 +114,8 @@ bool Network::findAugmentingPath(Station *source, Station *dest) {
     return dest->isVisited();
 }
 
-double Network::findMinResidualAlongPath(Station *source, Station *dest) {
-    double f = INT16_MAX;
+int Network::findMinResidualAlongPath(Station *source, Station *dest) {
+    int f = INT16_MAX;
     int cost = 0;
     for (auto v = dest; v != source; ) {
         auto e = v->getPath();
@@ -161,7 +160,7 @@ pair<int,int> Network::edmondsKarpCost(const string &source, const string &dest)
 }
 
 std::pair<int,int> Network::findMinResidualCostAlongPath(Station *source, Station *dest) {
-    double f = INT16_MAX;
+    int f = INT16_MAX;
     int cost = 0;
     for (auto v = dest; v != source; ) {
         auto e = v->getPath();
@@ -195,24 +194,18 @@ void Network::augmentFlowAlongPath(Station *source, Station *dest, double f) {
     }
 }
 
-void Network::edmondsKarp(const string &source, const string &dest) {
-
-    Station *stationSource = findStation(source);
-    Station *stationDest = findStation(dest);
-
-    if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest) {
+void Network::edmondsKarp(Station *source, Station *dest) {
+    if (source == nullptr || dest == nullptr || source == dest)
         throw logic_error("Invalid source and/or target vertex");
-    }
 
-    for (Station *station: stationsSet) {
-        for (Track *track: station->getAdj()) {
+
+    for (Station *station: stationsSet)
+        for (Track *track: station->getAdj())
             track->setFlow(0);
-        }
-    }
 
-    while (findAugmentingPath(stationSource, stationDest)) {
-        double f = findMinResidualAlongPath(stationSource, stationDest);
-        augmentFlowAlongPath(stationSource, stationDest, f);
+    while (findAugmentingPath(source, dest)) {
+        double f = findMinResidualAlongPath(source, dest);
+        augmentFlowAlongPath(source, dest, f);
     }
 }
 
@@ -223,22 +216,17 @@ void Network::edmondsKarp2(const string &source, const string &dest) {
 
     double cost = 0;
 
-    if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest) {
+    if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest)
         throw logic_error("Invalid source and/or target vertex");
-    }
 
-    for (Station *station: stationsSet) {
-        for (Track *track: station->getAdj()) {
+    for (Station *station: stationsSet)
+        for (Track *track: station->getAdj())
             track->setFlow(0);
-        }
-    }
 
     while (findAugmentingPath(stationSource, stationDest)) {
         double f = findMinResidualAlongPath(stationSource, stationDest);
         augmentFlowAlongPath(stationSource, stationDest, f);
-
     }
-
  }
 
 
@@ -248,17 +236,18 @@ pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
     double maxFlow = 0;
     double cases = (double) (stationsSet.size()*(stationsSet.size() - 1))/2;
     double calculatedCases = 0;
-    double percentage = 0;
+    int percentage = 0;
     for (size_t i = 0; i != stationsSet.size(); i++) {
         for (size_t j = i; j != stationsSet.size(); j++) {
             Station* src = stationsSet[i];
             Station* dest = stationsSet[j];
             if (src == dest) continue;
-            edmondsKarp(src->getName(), dest->getName());
+            edmondsKarp(src, dest);
             calculatedCases++;
             if (percentage < round(((calculatedCases/cases) * 100))){
-                percentage = round(((calculatedCases/cases) * 100));
-                cout << percentage << "% done" << endl;
+                percentage = (int) round(((calculatedCases/cases) * 100));
+                Util::cleanTerminal();
+                Util::printLoadingBar(percentage);
             }
             double flow = dest->getFlow();
             if (flow < maxFlow) continue;
@@ -306,7 +295,7 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
         string srcLocStr = getLocationString(src);
         for (Station* dest : stationsSet) {
             if (src == dest) continue;
-            edmondsKarp(src->getName(), dest->getName());
+            edmondsKarp(src, dest);
             double flow = dest->getFlow();
 
             auto itrSource = find_if(res.begin(), res.end(), [&](const auto& p) {
@@ -351,7 +340,7 @@ double Network::maxTrainsStation(Station* dest) {
     for (Station* station : endStations)
         superSource->addTrack(station, INT16_MAX, "REGULAR");
     addStation(superSource);
-    edmondsKarp(superSource->getName(), dest->getName());
+    edmondsKarp(superSource, dest);
     removeStation(superSource->getName());
 
     return dest->getFlow();

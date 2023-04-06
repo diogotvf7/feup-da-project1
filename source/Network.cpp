@@ -128,10 +128,8 @@ int Network::findMinResidualAlongPath(Station *source, Station *dest) {
     return f;
 }
 
-pair<int,int> Network::edmondsKarpCost(const string &source, const string &dest) {
+pair<int,int> Network::edmondsKarpCost(Station *stationSource, Station *stationDest) {
 
-    Station *stationSource = findStation(source);
-    Station *stationDest = findStation(dest);
     vector<pair<int,int>> all_flowCosts;
 
     if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest) {
@@ -204,25 +202,6 @@ void Network::edmondsKarp(Station *source, Station *dest) {
     }
 }
 
-void Network::edmondsKarp2(const string &source, const string &dest) {
-
-    Station *stationSource = findStation(source);
-    Station *stationDest = findStation(dest);
-
-    double cost = 0;
-
-    if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest)
-        throw logic_error("Invalid source and/or target vertex");
-
-    for (Station *station: stationsSet)
-        for (Track *track: station->getAdj())
-            track->setFlow(0);
-
-    while (findAugmentingPath(stationSource, stationDest)) {
-        double f = findMinResidualAlongPath(stationSource, stationDest);
-        augmentFlowAlongPath(stationSource, stationDest, f);
-    }
- }
 
 
 pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
@@ -253,7 +232,6 @@ pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
             ans.emplace_back(src->getName(), dest->getName());
         }
     }
-
     return {maxFlow, ans};
 }
 
@@ -281,7 +259,7 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
             return p.first == locStr;
         });
         if ((itr == res.end() ) && !locStr.empty()) {
-            res.push_back(make_pair(locStr, 0));
+            res.emplace_back(locStr, 0);
         }
         if ((itr == res.end() || res.empty()) && !locStr.empty())
             res.emplace_back(locStr, 0);
@@ -290,6 +268,7 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
         string srcLocStr = getLocationString(src);
         for (Station* dest : stationsSet) {
             if (src == dest) continue;
+
             edmondsKarp(src, dest);
             double flow = dest->getFlow();
 

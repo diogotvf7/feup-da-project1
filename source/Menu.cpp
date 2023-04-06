@@ -85,16 +85,24 @@ void Menu::exercise_2_1() {
              << Util::center("This means that between the two stations there can be a maximum number of " + to_string(result) + " trains.", 188)
              << endl
              << string(190, '_') << endl
-             << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+             << '|' << Util::center("TYPE 0 TO GO TO THE MAIN MENU", 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl;
         while (true) {
-            cout << "   - OPTION: ";
-            getline(cin >> ws, input);
-            cout << endl;
-            if (input == "menu" || input == "back") {
-                return;
+            cout << "Type 0: ";
+            cin >> input;
+            try {
+                int inputNum = stoi(input);
+                if (inputNum == 0) {
+                    // Valid input
+                    break;
+                } else {
+                    cout << "   - INVALID OPTION" << endl;
+                }
+            } catch (const std::invalid_argument&) {
+                cout << "   - INVALID OPTION" << endl;
+                cin.clear();
+                cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
-            else cout << "   - INVALID OPTION" << endl;
         }
     }
 }
@@ -109,7 +117,6 @@ void Menu::exercise_2_2() {
     for (const auto &p : v) {
         cout << i++ << ". " << p.first << "->" << p.second << endl;
     }
-
     while (true) {
         cout << "\n\n" << "Want to go back to the menu? Type 0: ";
         cin >> input;
@@ -128,17 +135,112 @@ void Menu::exercise_2_2() {
         }
     }
 
+
 }
 
 void Menu::exercise_2_3() {
+    int inputNum;
+    while (true) {
+        cout << "\n\n" << "Select option:" << endl;
+        cout << "1. District" << endl;
+        cout << "2. Municipality" << endl;
+        cout << "0. Return to menu" << endl;
+        cin >> input;
+        try {
+            inputNum = stoi(input);
+            if (inputNum == 0 || inputNum == 1 || inputNum == 2) {
+                // Valid input
+                break;
+            } else {
+                cout << "   - INVALID OPTION" << endl;
+            }
+        } catch (const std::invalid_argument&) {
+            cout << "   - INVALID OPTION" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
 
+    //string location = inputNum == 1 ? "district" : "municipality" ;
+    string location = "district";
+    std::vector<std::pair<std::string, double>> res = network->topTransportationNeeds(location);
+    if (location == "district") cout << "The municipalities with the most need are: " << endl;
+    else cout << "The districts with the most needs are: " << endl;
+    for (auto e : res){
+        cout << std::left << std::setw(20) << std::setfill(' ') << e.first << setw(12) << e.second << endl;    }
+    while (true) {
+        cout << "\n\n" << "Select option:" << endl;
+        cout << "0. Return to menu" << endl;
+        cin >> input;
+        try {
+            inputNum = stoi(input);
+            if (inputNum == 0) {
+                // Valid input
+                break;
+            } else {
+                cout << "   - INVALID OPTION" << endl;
+            }
+        } catch (const std::invalid_argument&) {
+            cout << "   - INVALID OPTION" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
 }
 
 void Menu::exercise_2_4() {
+    Station *st = listStations(network, "Choose the first station: ");
+    if (st == nullptr) return;
+    double maxFlow = network->maxTrainsStation(st);
+    cout << "The maximum number of trains that can simultaneously arrive at " << st->getName() << " train station is " << maxFlow << endl;
+    int inputNum;
+    while (true) {
+        cout << "\n\n" << "Type 0 to return to menu: ";
+        cin >> input;
+        try {
+            inputNum = stoi(input);
+            if (inputNum == 0) {
+                // Valid input
+                break;
+            } else {
+                cout << "   - INVALID OPTION" << endl;
+            }
+        } catch (const std::invalid_argument&) {
+            cout << "   - INVALID OPTION" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
 
 }
 
 void Menu::exercise_3_1() {
+    Station *stationSource = listStations(network, "Choose the first station: ");
+    if (stationSource == nullptr) return;
+    Station *stationDest = listStations(network, "Choose the first station: ");
+    if (stationDest == nullptr) return;
+    pair<int,int> p = network->edmondsKarpCost(stationSource,stationDest);
+    cout << "The maximum amount of trains that can simultaneously travel between two specific stations with minimum costs for the company"
+            " is: " << endl;
+    cout << "Amount: " << p.first << " | " << "Cost: " << p.second << endl;
+    int inputNum;
+    while (true) {
+        cout << "\n\n" << "Type 0 to return to menu: ";
+        cin >> input;
+        try {
+            inputNum = stoi(input);
+            if (inputNum == 0) {
+                // Valid input
+                break;
+            } else {
+                cout << "   - INVALID OPTION" << endl;
+            }
+        } catch (const std::invalid_argument&) {
+            cout << "   - INVALID OPTION" << endl;
+            cin.clear();
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+    }
 
 }
 
@@ -195,7 +297,7 @@ Station *Menu::listStations(Network *nw, const string &message, Station *ignoreS
              << '|' << string(188, '_') << '|' << endl;
 
         while (true) {
-            cout << "   - OPTION: ";
+            cout << "   - OPTION: " << std::flush;;
             getline(cin >> ws, input);
             cout << endl;
             string tmp = input;

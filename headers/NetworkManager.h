@@ -1,5 +1,5 @@
-#ifndef FEUP_DA_PROJECT_NETWORKMANAGER_H
-#define FEUP_DA_PROJECT_NETWORKMANAGER_H
+#ifndef NETWORKMANAGER_H
+#define NETWORKMANAGER_H
 
 #include <vector>
 #include <string>
@@ -11,8 +11,7 @@
 
 #define tracks_vector std::vector<std::pair<std::string,std::string>>
 
-class NetworkManager {
-public:
+namespace NetworkManager {
     void reduceConnectivity(Network *network, const tracks_vector &tracks, const std::vector<std::string> &stations);
     Network *createGraph(const std::string &datasetPath);
     double maxFlowBetween(Network *network, const std::string &source, const std::string &target);
@@ -21,4 +20,4 @@ public:
 };
 
 
-#endif //FEUP_DA_PROJECT_NETWORKMANAGER_H
+#endif //NETWORKMANAGER_H

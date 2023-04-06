@@ -169,8 +169,7 @@ void Menu::exercise_2_3() {
     for (auto e : res){
         cout << std::left << std::setw(20) << std::setfill(' ') << e.first << setw(12) << e.second << endl;    }
     while (true) {
-        cout << "\n\n" << "Select option:" << endl;
-        cout << "0. Return to menu" << endl;
+        cout << "\n\n" << "Type 0 to return to menu: ";
         cin >> input;
         try {
             inputNum = stoi(input);

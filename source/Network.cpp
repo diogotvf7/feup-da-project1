@@ -245,6 +245,9 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
 
     vector<pair<string, double>> res;
 
+    auto cases = (double) (stationsSet.size() * (stationsSet.size() - 1));
+    double calculatedCases = 0;
+    int percentage = 0;
     auto getLocationString = [&](Station* station) {
         if (location == "district") {
             return station->getDistrict();
@@ -282,6 +285,12 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
                 return p.first == destLocStr;
             });
             itrDest->second += flow;
+            calculatedCases++;
+            if (percentage < round(((calculatedCases/cases) * 100))){
+                percentage = (int) round(((calculatedCases/cases) * 100));
+                Util::cleanTerminal();
+                Util::printLoadingBar(percentage);
+            }
         }
     }
     sort(res.begin(), res.end(), customComparator);

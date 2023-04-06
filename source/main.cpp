@@ -17,7 +17,7 @@ int main () {
     Network *real_network = nm.createGraph("../dataset/real-dataset/");
     Network *test_network = nm.createGraph("../dataset/test-dataset/");
     Network *test_network_2 = nm.createGraph("../dataset/test-dataset-2/");
-
+    Network *test_simple_network = nm.createGraph("../dataset/test-simple-dataset/");
     /*#############################################*/
 
 
@@ -91,12 +91,33 @@ int main () {
 
     /*############################################*/
     /*           Test topAffectedStations        */
+    vector<Station*> topAffectedStations;
 
     Network *test_network_2_reduced01 = nm.createGraph("../dataset/test-dataset-2/");
     reduceStations = {"ST10"};
     reduceTracks = {};
     nm.reduceConnectivity(test_network_2, reduceTracks, reduceStations);
-    vector<Station*> topAffectedStations = nm.topAffectedStations(test_network_2, test_network_2_reduced01, 3);
+    topAffectedStations = nm.topAffectedStations(test_network_2, test_network_2_reduced01, 3);
+    for (int i = 0; i < topAffectedStations.size(); i++)
+        cout << "Top " << i+1 << " affected station: " << topAffectedStations[i]->getName() << endl;
+
+    cout << endl;
+
+    Network *test_simple_network_reduced = nm.createGraph("../dataset/test-simple-dataset/");
+    reduceStations = {"ST02"};
+    reduceTracks = {};
+    nm.reduceConnectivity(test_simple_network_reduced, reduceTracks, reduceStations);
+    topAffectedStations = nm.topAffectedStations(test_simple_network, test_simple_network_reduced, 3);
+    for (int i = 0; i < topAffectedStations.size(); i++)
+        cout << "Top " << i+1 << " affected station: " << topAffectedStations[i]->getName() << endl;
+
+    cout << endl;
+
+    Network *real_network_reduced = nm.createGraph("../dataset/real-dataset/");
+    reduceStations = {"Porto Campanhã", "Lisboa Oriente", "Aveiro - Vouga", "Coimbra B", "Coimbra", "Faro", "Ermidas-Sado"};
+    reduceTracks = {{"São Romão - A","São Romão"}, {"Pala","Mosteirô"}, {"Loulé","Almancil"}};
+    nm.reduceConnectivity(real_network_reduced, reduceTracks, reduceStations);
+    topAffectedStations = nm.topAffectedStations(real_network, real_network_reduced, 10);
     for (int i = 0; i < topAffectedStations.size(); i++)
         cout << "Top " << i+1 << " affected station: " << topAffectedStations[i]->getName() << endl;
 

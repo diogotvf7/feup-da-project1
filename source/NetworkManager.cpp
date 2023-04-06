@@ -37,20 +37,26 @@ vector<Station*> NetworkManager::topAffectedStations(Network *normalNetwork, Net
 
     vector<Station*> res;
     unordered_map<string,double> realMaxFlow, reducedMaxFlow, diff;
+    vector<Station*> stationSet = normalNetwork->getStationsSet(), reducedStationSet = reducedNetwork->getStationsSet();
 
-    for (Station *src : normalNetwork->getStationsSet()) {
-        for (Station *dest: normalNetwork->getStationsSet()) {
+    for (int i = 0; i < normalNetwork->getNumStations(); i++) {
+        Station *src = stationSet[i];
+        for (int j = i; j < normalNetwork->getNumStations(); j++) {
+            Station *dest = stationSet[j];
             string revKey = dest->getName() + "/" + src->getName();                             // Check if reverse pair
             if (src == dest || realMaxFlow.find(revKey) != realMaxFlow.end()) continue;     //  already exists
             normalNetwork->edmondsKarp(src->getName(), dest->getName());
             double flow = dest->getFlow();
             string key = src->getName() + "/" + dest->getName();
             realMaxFlow.emplace(key, flow);
+
         }
     }
 
-    for (Station *src : reducedNetwork->getStationsSet()) {
-        for (Station *dest: reducedNetwork->getStationsSet()) {
+   for (int i = 0; i < reducedNetwork->getNumStations(); i++) {
+        Station *src = reducedStationSet[i];
+        for (int j = i; j < reducedNetwork->getNumStations(); j++) {
+            Station *dest = reducedStationSet[j];
             string revKey = dest->getName() + "/" + src->getName();                             // Check if reverse pair
             if (src == dest || reducedMaxFlow.find(revKey) != reducedMaxFlow.end()) continue;     //  already exists
             reducedNetwork->edmondsKarp(src->getName(), dest->getName());
@@ -58,20 +64,13 @@ vector<Station*> NetworkManager::topAffectedStations(Network *normalNetwork, Net
             string key = src->getName() + "/" + dest->getName();
             reducedMaxFlow.emplace(key, flow);
         }
-    }
+   }
 
     for (auto &[key, maxFlow] : realMaxFlow) {
-        double aux = 0;
         string src = Util::split(key, '/')[0], dest = Util::split(key, '/')[1];
-        string revKey = key.substr(key.find('/') + 1) + "/" + key.substr(0, key.find('/'));
-        if (reducedMaxFlow.find(key) != reducedMaxFlow.end())
-            aux = reducedMaxFlow[key];
-        else if (reducedMaxFlow.find(revKey) != reducedMaxFlow.end())
-            aux = reducedMaxFlow[revKey];
-        else
-            aux = 0;
-        double maxFlowDifference = abs(maxFlow - aux);
-        if (maxFlowDifference == 0) continue;
+        if (reducedNetwork->findStation(src) == nullptr) continue;
+        if (reducedNetwork->findStation(dest) == nullptr) continue;
+        double maxFlowDifference = abs(maxFlow - reducedMaxFlow[key]);
         diff[src] += maxFlowDifference;
         diff[dest] += maxFlowDifference;
     }
@@ -80,11 +79,11 @@ vector<Station*> NetworkManager::topAffectedStations(Network *normalNetwork, Net
     for (auto &[key, value] : diff)
         pq.emplace(key, value);
 
-    for (int i = 0; i < n; i++) {
-        if (pq.empty()) break;
+    while (!pq.empty() && n-- > 0) {
         res.push_back(normalNetwork->findStation(pq.top().first));
         pq.pop();
     }
+
     return res;
 }
 

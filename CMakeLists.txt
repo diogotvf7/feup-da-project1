@@ -8,7 +8,6 @@ INCLUDE_DIRECTORIES(.)
 
 add_executable(
         feup_da_project
-        source/main.cpp
         dataset/real-dataset/network.csv
         dataset/real-dataset/stations.csv
         dataset/test-dataset/network.csv
@@ -20,4 +19,6 @@ add_executable(
         headers/Network.h
         source/Network.cpp
         headers/NetworkManager.h
-        source/NetworkManager.cpp)
+        source/NetworkManager.cpp
+        source/main.cpp
+        headers/Menu.h source/Menu.cpp)

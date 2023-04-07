@@ -2,6 +2,12 @@
 
 using namespace std;
 
+int Network::setStationsSet(std::vector<Station*> newStationsSet){
+    stationsSet = newStationsSet;
+    return 0;
+}
+
+
 Station* Network::findStation(const string &stationName) const {
     for (Station* station : stationsSet)
         if (station->getName() == stationName)
@@ -162,7 +168,7 @@ std::pair<int,int> Network::findMinResidualCostAlongPath(Station *source, Statio
         }
         cost += e->getService() == "STANDARD" ? 4 : 2;
     }
-    return {f,cost};
+    return {f,f*cost}; // ???????
 }
 
 

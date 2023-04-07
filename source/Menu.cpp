@@ -49,7 +49,8 @@ void Menu::mainMenu() {
          << endl;
 
     while (true) {
-        cout << "   - OPTION: ";
+        cout << "   - OPTION: " << std::flush;
+
         getline(cin >> ws, input);
         if (Util::isNumerical(input) && 1 <= stoi(input) && stoi(input) <= 10) break;
         else cout << "   - INVALID OPTION" << endl;
@@ -71,13 +72,13 @@ void Menu::exercise_2_1() {
              << '|' << string(188, '_') << '|' << endl
              << endl
              << Util::center("The calculated result is: " + to_string(result), 190) << endl
-             << Util::center("This means that between the two stations there can be a maximum number of " + to_string(result) + " trains.", 190)
+             << Util::center("This means that between the two stations there can be a maximum number of " + to_string(result) + " trains travelling simultaneously.", 190)
              << endl
              << string(190, '_') << endl
              << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl;
         while (true) {
-            cout << "   - OPTION: ";
+            cout << "   - OPTION: " << std::flush;
             getline(cin >> ws, input);
             cout << endl;
             if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
@@ -98,7 +99,7 @@ void Menu::exercise_2_2() {
          << '|' << string(188, '_') << '|' << endl
          << endl
          << Util::center("The calculated result is: " + to_string(MaxFlow), 188) << endl
-         << Util::center("The pair(s) of stations that have this max flow are:", 188) << endl;
+         << Util::center("The pair(s) of stations that have this max flow is/are:", 188) << endl;
     for (int i = 1; i <= v.size(); i++)
         cout << Util::center(to_string(i) + ". " + v[i - 1].first + " -> " + v[i-1].second, 190) << endl;
     cout << endl;
@@ -106,7 +107,7 @@ void Menu::exercise_2_2() {
          << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
          << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "   - OPTION: ";
+        cout << "   - OPTION: " << std::flush << std::flush;
         getline(cin >> ws, input);
         cout << endl;
         if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
@@ -132,7 +133,7 @@ void Menu::exercise_2_3() {
          << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
          << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "   - OPTION: ";
+        cout << "   - OPTION: " << std::flush;
         getline(cin >> ws, input);
         cout << endl;
         if (input == "1") {
@@ -158,7 +159,7 @@ void Menu::exercise_2_3() {
          << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
          << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "   - OPTION: ";
+        cout << "   - OPTION: " << std::flush;
         getline(cin >> ws, input);
         cout << endl;
         if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
@@ -181,7 +182,7 @@ void Menu::exercise_2_4() {
          << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
          << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "   - OPTION: ";
+        cout << "   - OPTION: " << std::flush;
         getline(cin >> ws, input);
         cout << endl;
         if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
@@ -209,7 +210,7 @@ void Menu::exercise_3_1() {
          << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
          << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "   - OPTION: ";
+        cout << "   - OPTION: " << std::flush;
         getline(cin >> ws, input);
         cout << endl;
         if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
@@ -240,7 +241,7 @@ void Menu::exercise_4_1() {
              << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl;
         while (true) {
-            cout << "   - OPTION: ";
+            cout << "   - OPTION: " << std::flush;
             getline(cin >> ws, input);
             cout << endl;
             if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
@@ -253,7 +254,7 @@ void Menu::exercise_4_2() {
 
 }
 
-void Menu::manageReducedNetworks() { //TODO Edit reduced networks thaat already exist???
+void Menu::manageReducedNetworks() { //TODO Edit reduced networks that already exist???
     bool alive = true;
     while (alive) {
         Util::cleanTerminal();
@@ -273,7 +274,7 @@ void Menu::manageReducedNetworks() { //TODO Edit reduced networks thaat already 
              << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl;
         while (true) {
-            cout << "   - OPTION: ";
+            cout << "   - OPTION: " << std::flush;
             getline(cin >> ws, input);
             cout << endl;
             if (Util::normalise(input) == "1") {
@@ -314,7 +315,7 @@ bool Menu::createReducedNetwork() {
              << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl;
         while (true) {
-            cout << "   - OPTION: ";
+            cout << "   - OPTION: " << std::flush;
             getline(cin >> ws, input);
             cout << endl;
             if (input == "1") {
@@ -326,8 +327,12 @@ bool Menu::createReducedNetwork() {
             else if (input == "2") {
                 Station *src = listStations(reducedNetwork, "Choose the first station: ");
                 if (src == nullptr) break;
+                Network* nm = reducedNetwork;
+                vector<Station *> newStationsSet;
+                for (Track* t : src->getAdj()) newStationsSet.push_back(t->getDestination());
+                nm->setStationsSet(newStationsSet);
                 // TODO este remove path esta a mostrar na segunda opçao todas as estaçoes em vez de apenas mostrar a adj list da src
-                Station *dest = listStations(reducedNetwork, "Choose the second station: ", src);
+                Station *dest = listStations(nm, "Choose the second station: ", src);
                 if (dest == nullptr) break;
                 reducedNetwork->removeTrack(src->getName(), dest->getName());
                 break;
@@ -360,7 +365,7 @@ bool Menu::deleteReducedNetwork() {
              << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl;
         while (true) {
-            cout << "   - OPTION: ";
+            cout << "   - OPTION: " << std::flush;
             getline(cin >> ws, input);
             cout << endl;
             if (reducedNetworks.find(input) != reducedNetworks.end()) {
@@ -391,7 +396,7 @@ bool Menu::renameReducedNetwork() {
              << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl;
         while (true) {
-            cout << "   - OPTION: ";
+            cout << "   - OPTION: " << std::flush;
             getline(cin >> ws, input);
             cout << endl;
             if (reducedNetworks.find(input) != reducedNetworks.end()) {
@@ -422,7 +427,7 @@ bool Menu::seeReducedNetworks() {
          << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
          << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "   - OPTION: ";
+        cout << "   - OPTION: " << std::flush;
         getline(cin >> ws, input);
         cout << endl;
         if (Util::normalise(input) == "back") return true;
@@ -464,7 +469,7 @@ Station *Menu::listStations(Network *nw, const string &message, Station *ignoreS
              << '|' << string(188, '_') << '|' << endl;
 
         while (true) {
-            cout << "   - OPTION: ";
+            cout << "   - OPTION: " << std::flush;
             getline(cin >> ws, input);
             cout << endl;
             string tmp = input;
@@ -515,7 +520,7 @@ Network *Menu::selectReducedNetwork() {
          << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
          << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "   - OPTION: ";
+        cout << "   - OPTION: " << std::flush;
         getline(cin >> ws, input);
         cout << endl;
         if (reducedNetworks.find(input) != reducedNetworks.end()) return reducedNetworks[input];

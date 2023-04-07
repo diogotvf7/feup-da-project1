@@ -13,6 +13,7 @@
 class Network {
     std::vector<Station*> stationsSet;
 public:
+    int setStationsSet(std::vector<Station*> newStationsSet);
     Station* findStation(const std::string &stationName) const;
     bool addStation(Station* station);
     void removeTrack(const std::string src, const std::string dest);

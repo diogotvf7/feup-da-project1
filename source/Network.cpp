@@ -245,7 +245,7 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
 
     vector<pair<string, double>> res;
 
-    auto cases = (double) (stationsSet.size() * (stationsSet.size() - 1));
+    auto cases = (double) ((stationsSet.size() * (stationsSet.size() - 1))/2);
     double calculatedCases = 0;
     int percentage = 0;
     auto getLocationString = [&](Station* station) {
@@ -267,9 +267,11 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
         if ((itr == res.end() || res.empty()) && !locStr.empty())
             res.emplace_back(locStr, 0);
     }
-    for (Station* src : stationsSet) {
+    for (int i = 0; i < getNumStations(); i++) {
+        Station* src = stationsSet[i];
         string srcLocStr = getLocationString(src);
-        for (Station* dest : stationsSet) {
+        for (int j = i; j < getNumStations(); j++) {
+            Station* dest = stationsSet[j];
             if (src == dest) continue;
 
             edmondsKarp(src, dest);

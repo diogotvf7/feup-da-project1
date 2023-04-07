@@ -164,7 +164,7 @@ void Menu::exercise_2_3() {
     //string location = inputNum == 1 ? "district" : "municipality" ;
     string location = "district";
     std::vector<std::pair<std::string, double>> res = network->topTransportationNeeds(location);
-    if (location == "district") cout << "The municipalities with the most need are: " << endl;
+    if (location == "district") cout << "The municipalities with the most needs are: " << endl;
     else cout << "The districts with the most needs are: " << endl;
     for (auto e : res){
         cout << std::left << std::setw(20) << std::setfill(' ') << e.first << setw(12) << e.second << endl;    }
@@ -259,8 +259,7 @@ void Menu::manageNetworks() {
 
 void Menu::runTests() {
     // TODO
-    // Corre os testes em Test.cpp
-    // Conseguir escolher que testes correr??
+
 }
 
 Station *Menu::listStations(Network *nw, const string &message, Station *ignoreStation) {

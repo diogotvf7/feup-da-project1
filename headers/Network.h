@@ -37,11 +37,11 @@ public:
     std::pair<double,std::vector<std::pair<std::string,std::string>>> topMaxFlow();
 
     /*This function refers to exercise 2.3*/
-    std::vector<std::pair<std::string, double>> topTransportationNeeds(std::string location);
+    std::vector<std::pair<std::string, int>> topTransportationNeeds(std::string location);
 
     /*This function refers to exercise 2.4*/
     void DFS(std::vector<Station*> &endStations, Station* srcStation);
-    double maxTrainsStation(Station* dest);
+    int maxTrainsStation(Station* dest);
 
     /*This functions refer to exercise 3.1*/
     std::pair<int,int> edmondsKarpCost(Station *stationSource, Station *stationDest);

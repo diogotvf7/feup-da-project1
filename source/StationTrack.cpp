@@ -93,8 +93,8 @@ Track* Station::addTrack(Station *dest, int capacity, const string &service) {
     return newTrack;
 }
 
-double Station::getFlow() const {
-    double flow = 0;
+int Station::getFlow() const {
+    int flow = 0;
     for (Track *track : incoming)
         flow += track->getFlow();
     return flow;

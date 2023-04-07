@@ -21,7 +21,8 @@ void Menu::run() {
             case 5: exercise_3_1(); input = "0"; break;
             case 6: exercise_4_1(); input = "0"; break;
             case 7: exercise_4_2(); input = "0"; break;
-            case 8: manageNetworks(); input = "0"; break;
+            case 8:
+                manageReducedNetworks(); input = "0"; break;
             case 9: runTests(); input = "0"; break;
             case 10: cout << "hello"; alive = false; break;
         }
@@ -70,8 +71,8 @@ void Menu::exercise_2_1() {
              << '|' << Util::center(message, 188) << '|' << endl
              << '|' << string(188, '_') << '|' << endl
              << endl
-             << Util::center("The calculated result is: " + to_string(result), 188) << endl
-             << Util::center("This means that between the two stations there can be a maximum number of " + to_string(result) + " trains.", 188)
+             << Util::center("The calculated result is: " + to_string(result), 190) << endl
+             << Util::center("This means that between the two stations there can be a maximum number of " + to_string(result) + " trains.", 190)
              << endl
              << string(190, '_') << endl
              << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
@@ -87,9 +88,9 @@ void Menu::exercise_2_1() {
 }
 
 void Menu::exercise_2_2() {
-    std::pair<int,std::vector<std::pair<std::string,std::string>>> res = network->topMaxFlow();
+    pair<int,vector<pair<string,string>>> res = network->topMaxFlow();
     int MaxFlow = res.first;
-    std::vector<std::pair<std::string,std::string>> v = res.second;
+    vector<pair<string,string>> v = res.second;
     Util::cleanTerminal();
     cout << string(190, '_') << endl
          << '|' << Util::center("Top max flow", 188) << '|' << endl
@@ -112,133 +113,319 @@ void Menu::exercise_2_2() {
         if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
         else cout << "   - INVALID OPTION" << endl;
     }
-
-
 }
 
 void Menu::exercise_2_3() {
-    int inputNum;
+    string option;
+    vector<pair<string, int>> res;
+    Util::cleanTerminal();
+    cout << string(190, '_') << endl
+         << '|' << Util::center("Top transportation needs", 188) << '|' << endl
+         << '|' << Util::center("For this function you may choose to calculate the top", 188) << '|' << endl
+         << '|' << Util::center("transportation needs acording to:", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl
+         << endl
+         << Util::center("1. District", 190) << endl
+         << Util::center("2. Municipality", 190) << endl
+         << endl
+         << string(190, '_') << endl
+         << '|' << Util::center("WRITE 1 OR 2 TO DISPLAY RESULT", 188) << '|' << endl
+         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "\n\n" << "Select option:" << endl;
-        cout << "1. District" << endl;
-        cout << "2. Municipality" << endl;
-        cout << "0. Return to menu" << endl;
-        cin >> input;
-        try {
-            inputNum = stoi(input);
-            if (inputNum == 0 || inputNum == 1 || inputNum == 2) {
-                // Valid input
-                break;
-            } else {
-                cout << "   - INVALID OPTION" << endl;
-            }
-        } catch (const std::invalid_argument&) {
-            cout << "   - INVALID OPTION" << endl;
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+        cout << "   - OPTION: ";
+        getline(cin >> ws, input);
+        cout << endl;
+        if (input == "1") {
+            option = "district";
+            break;
+        } else if (input == "2") {
+            option = "municipality";
+            break;
+        } else if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+        else cout << "   - INVALID OPTION" << endl;
     }
-
-    //string location = inputNum == 1 ? "district" : "municipality" ;
-    string location = "district";
-    std::vector<std::pair<std::string, double>> res = network->topTransportationNeeds(location);
-    if (location == "district") cout << "The municipalities with the most needs are: " << endl;
-    else cout << "The districts with the most needs are: " << endl;
-    for (auto e : res){
-        cout << std::left << std::setw(20) << std::setfill(' ') << e.first << setw(12) << e.second << endl;    }
+    res = network->topTransportationNeeds(option);
+    Util::cleanTerminal();
+    cout << string(190, '_') << endl
+         << '|' << Util::center("Top transportation needs", 188) << '|' << endl
+         << '|' << Util::center("The top transportation needs according to " + option + " are:", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl
+         << endl;
+    for (auto &[place, flow] : res)
+        cout << Util::center(place + " has " + to_string(flow) + " of total flow.", 190) << endl;
+    cout << endl
+         << string(190, '_') << endl
+         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "\n\n" << "Type 0 to return to menu: ";
-        cin >> input;
-        try {
-            inputNum = stoi(input);
-            if (inputNum == 0) {
-                // Valid input
-                break;
-            } else {
-                cout << "   - INVALID OPTION" << endl;
-            }
-        } catch (const std::invalid_argument&) {
-            cout << "   - INVALID OPTION" << endl;
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+        cout << "   - OPTION: ";
+        getline(cin >> ws, input);
+        cout << endl;
+        if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+        else cout << "   - INVALID OPTION" << endl;
     }
 }
 
 void Menu::exercise_2_4() {
-    Station *st = listStations(network, "Choose the first station: ");
+    Station *st = listStations(network, "Choose a station: ");
     if (st == nullptr) return;
-    double maxFlow = network->maxTrainsStation(st);
-    cout << "The maximum number of trains that can simultaneously arrive at " << st->getName() << " train station is " << maxFlow << endl;
-    int inputNum;
+    int maxFlow = network->maxTrainsStation(st);
+    Util::cleanTerminal();
+    cout << string(190, '_') << endl
+         << '|' << Util::center("Maximum number of arriving trains to " + st->getName() + "considering entire railway:", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl
+         << endl
+         << Util::center("The maximum number of trains that can simultaneously arrive at " + st->getName() + " train station is " + to_string(maxFlow), 190) << endl
+         << endl
+         << string(190, '_') << endl
+         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "\n\n" << "Type 0 to return to menu: ";
-        cin >> input;
-        try {
-            inputNum = stoi(input);
-            if (inputNum == 0) {
-                // Valid input
-                break;
-            } else {
-                cout << "   - INVALID OPTION" << endl;
-            }
-        } catch (const std::invalid_argument&) {
-            cout << "   - INVALID OPTION" << endl;
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+        cout << "   - OPTION: ";
+        getline(cin >> ws, input);
+        cout << endl;
+        if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+        else cout << "   - INVALID OPTION" << endl;
     }
-
 }
 
 void Menu::exercise_3_1() {
-    Station *stationSource = listStations(network, "Choose the first station: ");
-    if (stationSource == nullptr) return;
-    Station *stationDest = listStations(network, "Choose the first station: ");
-    if (stationDest == nullptr) return;
-    pair<int,int> p = network->edmondsKarpCost(stationSource,stationDest);
-    cout << "The maximum amount of trains that can simultaneously travel between two specific stations with minimum costs for the company"
-            " is: " << endl;
-    cout << "Amount: " << p.first << " | " << "Cost: " << p.second << endl;
-    int inputNum;
+    Station *src = listStations(network, "Choose the first station: ");
+    if (src == nullptr) return;
+    Station *dest = listStations(network, "Choose the second station: ", src);
+    if (dest == nullptr) return;
+    pair<int,int> p = network->edmondsKarpCost(src,dest);
+    Util::cleanTerminal();
+    cout << string(190, '_') << endl
+         << '|' << Util::center("Maximum number of arriving trains travelling between", 188) << '|' << endl
+         << '|' << Util::center(src->getName() + " and " + dest->getName(), 188) << '|' << endl
+         << '|' << Util::center("with minimum costs for the company", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl
+         << endl
+         << Util::center("The max flow of trains between " + src->getName() + " and " + dest->getName() +  " is: " + to_string(p.first), 190) << endl
+         << Util::center("The cost for the company is: " + to_string(p.second), 190) << endl
+         << endl
+         << string(190, '_') << endl
+         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl;
     while (true) {
-        cout << "\n\n" << "Type 0 to return to menu: ";
-        cin >> input;
-        try {
-            inputNum = stoi(input);
-            if (inputNum == 0) {
-                // Valid input
-                break;
-            } else {
-                cout << "   - INVALID OPTION" << endl;
-            }
-        } catch (const std::invalid_argument&) {
-            cout << "   - INVALID OPTION" << endl;
-            cin.clear();
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
+        cout << "   - OPTION: ";
+        getline(cin >> ws, input);
+        cout << endl;
+        if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+        else cout << "   - INVALID OPTION" << endl;
     }
-
 }
 
 void Menu::exercise_4_1() {
-
+    // TODO Select the reduced graph before
+    /*Station *src = listStations(network, "Choose the first station: ");
+    if (src == nullptr) return;
+    Station *dest = listStations(network, "Choose the second station: ", src);
+    if (dest == nullptr) return;
+    Util::cleanTerminal();
+    cout << string(190, '_') << endl
+         << '|' << Util::center("Maximum number of arriving trains travelling between", 188) << '|' << endl
+         << '|' << Util::center(src->getName() + " and " + dest->getName(), 188) << '|' << endl
+         << '|' << Util::center("with minimum costs for the company", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl
+         << endl
+         *//*<< Util::center("The max flow of trains between " + src->getName() + " and " + dest->getName() +  " is: " + to_string(p.first), 188) << endl
+         << Util::center("The cost for the company is: " + to_string(p.second), 188) << endl*//*
+         << endl
+         << string(190, '_') << endl
+         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl;
+    while (true) {
+        cout << "   - OPTION: ";
+        getline(cin >> ws, input);
+        cout << endl;
+        if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+        else cout << "   - INVALID OPTION" << endl;
+    }*/
 }
 
 void Menu::exercise_4_2() {
 
 }
 
-void Menu::manageNetworks() {
-    // TODO
-    // See network
-    // Create, remove, rename, see reduced networks
+void Menu::manageReducedNetworks() { //TODO Edit reduced networks thaat already exist???
+    bool alive = true;
+    while (alive) {
+        Util::cleanTerminal();
+        cout << string(190, '_') << endl
+             << '|' << Util::center("Reduced Networks Manager", 188) << '|' << endl
+             << '|' << Util::center("In this menu you can create, remove, or rename your reduced networks!", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl
+             << endl
+             << endl
+             << Util::center("1. Create reduced network", 190) << endl
+             << Util::center("2. Delete reduced network", 190) << endl
+             << Util::center("3. Rename reduced network", 190) << endl
+             << Util::center("4. See all reduced networks", 190) << endl
+             << endl
+             << string(190, '_') << endl
+             << '|' << Util::center("WRITE A NUMBER OPTION TO PROCEED", 188) << '|' << endl
+             << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl;
+        while (true) {
+            cout << "   - OPTION: ";
+            getline(cin >> ws, input);
+            cout << endl;
+            if (Util::normalise(input) == "1") {
+                alive = createReducedNetwork();
+                break;
+            } else if (Util::normalise(input) == "2") {
+                alive = deleteReducedNetwork();
+                break;
+            } else if (Util::normalise(input) == "3") {
+                alive = renameReducedNetwork();
+                break;
+            } else if (Util::normalise(input) == "4") {
+                alive = seeReducedNetworks();
+                break;
+            } else if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+            else cout << "   - INVALID OPTION" << endl;
+        }
+    }
 }
 
-void Menu::runTests() {
-    // TODO
-    // Corre os testes em Test.cpp
-    // Conseguir escolher que testes correr??
+bool Menu::createReducedNetwork() {
+    Network *reducedNetwork = NetworkManager::createGraph("../dataset/real-dataset/");
+    while (true) {
+        Util::cleanTerminal();
+        cout << string(190, '_') << endl
+             << '|' << Util::center("Create a reduced network", 188) << '|' << endl
+             << '|' << Util::center("Choose one of the options to create a simulation of a reduced connectivity network!", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl
+             << endl
+             << endl
+             << Util::center("1. Remove station", 190) << endl
+             << Util::center("2. Remove path", 190) << endl
+             << Util::center("3. Save", 190) << endl
+             << endl
+             << string(190, '_') << endl
+             << '|' << Util::center("WRITE A NUMBER OPTION TO PROCEED", 188) << '|' << endl
+             << '|' << Util::center("WRITE BACK TO GO TO THE PREVIOUS MENU", 188) << '|' << endl
+             << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl;
+        while (true) {
+            cout << "   - OPTION: ";
+            getline(cin >> ws, input);
+            cout << endl;
+            if (input == "1") {
+                Station *st = listStations(reducedNetwork, "Choose the station to remove: ");
+                if (st == nullptr) break;
+                reducedNetwork->removeStation(st->getName());
+                break;
+            }
+            else if (input == "2") {
+                Station *src = listStations(reducedNetwork, "Choose the first station: ");
+                if (src == nullptr) break;
+                // TODO este remove path esta a mostrar na segunda opçao todas as estaçoes em vez de apenas mostrar a adj list da src
+                Station *dest = listStations(reducedNetwork, "Choose the second station: ", src);
+                if (dest == nullptr) break;
+                reducedNetwork->removeTrack(src->getName(), dest->getName());
+                break;
+            }
+            else if (input == "3") {
+                cout << Util::center("Write the name of the reduced network: ", 190) << endl;
+                getline(cin >> ws, input);
+                reducedNetworks.emplace(input, reducedNetwork);
+                return true;
+            }
+            else if (Util::normalise(input) == "back") return true;
+            else if (Util::normalise(input) == "menu") return false;
+            else cout << "   - INVALID OPTION" << endl;
+        }
+    }
+}
+
+bool Menu::deleteReducedNetwork() {
+    while (true) {
+        Util::cleanTerminal();
+        cout << string(190, '_') << endl
+             << '|' << Util::center("Delete a reduced network", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl
+             << endl;
+        listReducedNetworks();
+        cout << endl
+             << string(190, '_') << endl
+             << '|' << Util::center("WRITE THE NAME OF A REDUCED NETWORK IN ORDER TO DELETE IT", 188) << '|' << endl
+             << '|' << Util::center("WRITE BACK TO GO TO THE PREVIOUS MENU", 188) << '|' << endl
+             << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl;
+        while (true) {
+            cout << "   - OPTION: ";
+            getline(cin >> ws, input);
+            cout << endl;
+            if (reducedNetworks.find(input) != reducedNetworks.end()) {
+                NetworkManager::deleteGraph(reducedNetworks.at(input));
+                reducedNetworks.erase(input);
+                break;
+            }
+            else if (Util::normalise(input) == "back") return true;
+            else if (Util::normalise(input) == "menu") return false;
+            else cout << "   - INVALID OPTION" << endl;
+        }
+    }
+}
+
+bool Menu::renameReducedNetwork() {
+    string prevName;
+    while (true) {
+        Util::cleanTerminal();
+        cout << string(190, '_') << endl
+             << '|' << Util::center("Rename a reduced network", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl
+             << endl;
+        listReducedNetworks();
+        cout << endl
+             << string(190, '_') << endl
+             << '|' << Util::center("WRITE THE NAME OF A REDUCED NETWORK IN ORDER TO RENAME IT", 188) << '|' << endl
+             << '|' << Util::center("WRITE BACK TO GO TO THE PREVIOUS MENU", 188) << '|' << endl
+             << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl;
+        while (true) {
+            cout << "   - OPTION: ";
+            getline(cin >> ws, input);
+            cout << endl;
+            if (reducedNetworks.find(input) != reducedNetworks.end()) {
+                prevName = input;
+                cout << Util::center("Write the new name of the reduced network: ", 190) << endl;
+                getline(cin >> ws, input);
+                reducedNetworks.emplace(input, reducedNetworks[input]);
+                reducedNetworks.erase(prevName);
+                break;
+            }
+            else if (Util::normalise(input) == "back") return true;
+            else if (Util::normalise(input) == "menu") return false;
+            else cout << "   - INVALID OPTION" << endl;
+        }
+    }
+}
+
+bool Menu::seeReducedNetworks() {
+    Util::cleanTerminal();
+    cout << string(190, '_') << endl
+         << '|' << Util::center("See all reduced networks", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl
+         << endl;
+    listReducedNetworks();
+    cout << endl
+         << string(190, '_') << endl
+         << '|' << Util::center("WRITE BACK TO GO TO THE PREVIOUS MENU", 188) << '|' << endl
+         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl;
+    while (true) {
+        cout << "   - OPTION: ";
+        getline(cin >> ws, input);
+        cout << endl;
+        if (Util::normalise(input) == "back") return true;
+        else if (Util::normalise(input) == "menu") return false;
+        else cout << "   - INVALID OPTION" << endl;
+    }
 }
 
 Station *Menu::listStations(Network *nw, const string &message, Station *ignoreStation) {
@@ -297,4 +484,23 @@ Station *Menu::listStations(Network *nw, const string &message, Station *ignoreS
             else cout << "   - INVALID OPTION" << endl;
         }
     }
+}
+
+void Menu::listReducedNetworks() {
+    cout << endl;
+    if (reducedNetworks.empty()) {
+        cout << Util::center("THERE ARE NO REDUCED NETWORKS YET", 190) << endl;
+        cout << endl;
+        return;
+    }
+    int i = 0;
+    for (auto &reducedNetwork : reducedNetworks)
+        cout << Util::center(to_string(i + 1) + " -   " + reducedNetwork.first, 190) << endl;
+    cout << endl;
+}
+
+void Menu::runTests() {
+    // TODO
+    // Corre os testes em Test.cpp
+    // Conseguir escolher que testes correr??
 }

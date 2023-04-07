@@ -41,7 +41,7 @@ namespace Util {
 
     bool isAlpha(const std::string &str) {
         for (char c : str)
-            if (!isalpha(c)) return false;
+            if (!isalpha(c) && !isspace(c)) return false;
         return true;
     }
 

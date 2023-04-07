@@ -531,6 +531,5 @@ Network *Menu::selectReducedNetwork() {
 
 void Menu::runTests() {
     // TODO
-    // Corre os testes em Test.cpp
-    // Conseguir escolher que testes correr??
+    
 }

@@ -21,8 +21,7 @@ void Menu::run() {
             case 5: exercise_3_1(); input = "0"; break;
             case 6: exercise_4_1(); input = "0"; break;
             case 7: exercise_4_2(); input = "0"; break;
-            case 8:
-                manageReducedNetworks(); input = "0"; break;
+            case 8: manageReducedNetworks(); input = "0"; break;
             case 9: runTests(); input = "0"; break;
             case 10: cout << "hello"; alive = false; break;
         }

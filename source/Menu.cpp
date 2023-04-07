@@ -218,31 +218,35 @@ void Menu::exercise_3_1() {
 }
 
 void Menu::exercise_4_1() {
-    // TODO Select the reduced graph before
-    /*Station *src = listStations(network, "Choose the first station: ");
+    Network *reducedNetwork = selectReducedNetwork();
+    if (reducedNetwork == nullptr) return;
+    Station *src = listStations(reducedNetwork, "Choose the first station: ");
     if (src == nullptr) return;
-    Station *dest = listStations(network, "Choose the second station: ", src);
+    Station *dest = listStations(reducedNetwork, "Choose the second station: ", src);
     if (dest == nullptr) return;
     Util::cleanTerminal();
-    cout << string(190, '_') << endl
-         << '|' << Util::center("Maximum number of arriving trains travelling between", 188) << '|' << endl
-         << '|' << Util::center(src->getName() + " and " + dest->getName(), 188) << '|' << endl
-         << '|' << Util::center("with minimum costs for the company", 188) << '|' << endl
-         << '|' << string(188, '_') << '|' << endl
-         << endl
-         *//*<< Util::center("The max flow of trains between " + src->getName() + " and " + dest->getName() +  " is: " + to_string(p.first), 188) << endl
-         << Util::center("The cost for the company is: " + to_string(p.second), 188) << endl*//*
-         << endl
-         << string(190, '_') << endl
-         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
-         << '|' << string(188, '_') << '|' << endl;
+    string message = "From: " + src->getName() + " ---> To: " + dest->getName();
+    int result = NetworkManager::maxFlowBetween(network, src, dest);
     while (true) {
-        cout << "   - OPTION: ";
-        getline(cin >> ws, input);
-        cout << endl;
-        if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
-        else cout << "   - INVALID OPTION" << endl;
-    }*/
+        cout << string(190, '_') << endl
+             << '|' << Util::center("Max flow in reduced connectivity circumstances", 188) << '|' << endl
+             << '|' << Util::center(message, 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl
+             << endl
+             << Util::center("The calculated result is: " + to_string(result), 190) << endl
+             << Util::center("This means that between the two stations there can be a maximum number of " + to_string(result) + " trains.", 190)
+             << endl
+             << string(190, '_') << endl
+             << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl;
+        while (true) {
+            cout << "   - OPTION: ";
+            getline(cin >> ws, input);
+            cout << endl;
+            if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+            else cout << "   - INVALID OPTION" << endl;
+        }
+    }
 }
 
 void Menu::exercise_4_2() {
@@ -496,6 +500,28 @@ void Menu::listReducedNetworks() {
     for (auto &reducedNetwork : reducedNetworks)
         cout << Util::center(to_string(i + 1) + " -   " + reducedNetwork.first, 190) << endl;
     cout << endl;
+}
+
+Network *Menu::selectReducedNetwork() {
+    Util::cleanTerminal();
+    cout << string(190, '_') << endl
+         << '|' << Util::center("See all reduced networks", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl
+         << endl;
+    listReducedNetworks();
+    cout << endl
+         << string(190, '_') << endl
+         << '|' << Util::center("WRITE BACK TO GO TO THE PREVIOUS MENU", 188) << '|' << endl
+         << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+         << '|' << string(188, '_') << '|' << endl;
+    while (true) {
+        cout << "   - OPTION: ";
+        getline(cin >> ws, input);
+        cout << endl;
+        if (reducedNetworks.find(input) != reducedNetworks.end()) return reducedNetworks[input];
+        if (Util::normalise(input) == "back" || Util::normalise(input) == "menu") return nullptr;
+        else cout << "   - INVALID OPTION" << endl;
+    }
 }
 
 void Menu::runTests() {

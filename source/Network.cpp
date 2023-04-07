@@ -132,15 +132,9 @@ pair<int,int> Network::edmondsKarpCost(Station *stationSource, Station *stationD
 
     vector<pair<int,int>> all_flowCosts;
 
-    if (stationSource == nullptr || stationDest == nullptr || stationSource == stationDest) {
-        throw logic_error("Invalid source and/or target vertex");
-    }
-
-    for (Station *station: stationsSet) {
-        for (Track *track: station->getAdj()) {
+    for (Station *station: stationsSet)
+        for (Track *track: station->getAdj())
             track->setFlow(0);
-        }
-    }
 
     while (findAugmentingPath(stationSource, stationDest)) {
         pair<int,int> flowCost = findMinResidualCostAlongPath(stationSource, stationDest);
@@ -207,21 +201,19 @@ void Network::edmondsKarp(Station *source, Station *dest) {
 pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
     vector<pair<string,string>> ans;
     vector<pair<string,string>> analysedCases;
-    double maxFlow = 0;
-    double cases = (double) (stationsSet.size()*(stationsSet.size() - 1))/2;
-    double calculatedCases = 0;
+    double maxFlow = 0, calculatedCases = 0, cases = (double) (stationsSet.size()*(stationsSet.size() - 1))/2;
     int percentage = 0;
+
     for (size_t i = 0; i != stationsSet.size(); i++) {
         for (size_t j = i; j != stationsSet.size(); j++) {
             Station* src = stationsSet[i];
             Station* dest = stationsSet[j];
             if (src == dest) continue;
             edmondsKarp(src, dest);
-            calculatedCases++;
-            if (percentage < round(((calculatedCases/cases) * 100))){
-                percentage = (int) round(((calculatedCases/cases) * 100));
+            if (percentage < round(calculatedCases++ / cases * 100)) {
+                percentage = (int) round(calculatedCases / cases * 100);
                 Util::cleanTerminal();
-                Util::printLoadingBar(percentage);
+                Util::printLoadingBar(percentage, "Calculating max flow between all pairs of stations...");
             }
             double flow = dest->getFlow();
             if (flow < maxFlow) continue;
@@ -241,19 +233,14 @@ struct{
         }
 }customComparator;
 
-vector<pair<string, double>> Network::topTransportationNeeds(string location) {
-
-    vector<pair<string, double>> res;
-
-    auto cases = (double) ((stationsSet.size() * (stationsSet.size() - 1))/2);
+vector<pair<string, int>> Network::topTransportationNeeds(string location) { // TODO limitar numero de resultados
+    vector<pair<string,int>> res;
+    auto cases = (double) (pow(getNumStations(), 2) - getNumStations()) / 2;
     double calculatedCases = 0;
     int percentage = 0;
     auto getLocationString = [&](Station* station) {
-        if (location == "district") {
-            return station->getDistrict();
-        } else if (location == "municipality") {
-            return station->getMunicipality();
-        }
+        if (location == "district") return station->getDistrict();
+        else if (location == "municipality") return station->getMunicipality();
         return string("");
     };
     for (Station* station : stationsSet) {
@@ -261,9 +248,8 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
         auto itr = find_if(res.begin(), res.end(), [&](const auto& p) {
             return p.first == locStr;
         });
-        if ((itr == res.end() ) && !locStr.empty()) {
+        if ((itr == res.end() ) && !locStr.empty())
             res.emplace_back(locStr, 0);
-        }
         if ((itr == res.end() || res.empty()) && !locStr.empty())
             res.emplace_back(locStr, 0);
     }
@@ -275,7 +261,7 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
             if (src == dest) continue;
 
             edmondsKarp(src, dest);
-            double flow = dest->getFlow();
+            int flow = dest->getFlow();
 
             auto itrSource = find_if(res.begin(), res.end(), [&](const auto& p) {
                 return p.first == srcLocStr;
@@ -287,11 +273,10 @@ vector<pair<string, double>> Network::topTransportationNeeds(string location) {
                 return p.first == destLocStr;
             });
             itrDest->second += flow;
-            calculatedCases++;
-            if (percentage < round(((calculatedCases/cases) * 100))){
-                percentage = (int) round(((calculatedCases/cases) * 100));
+            if (percentage < round(calculatedCases++ / cases * 100)) {
+                percentage = (int) round(calculatedCases / cases * 100);
                 Util::cleanTerminal();
-                Util::printLoadingBar(percentage);
+                Util::printLoadingBar(percentage, "Calculating top transportation needs according to " + location + "...");
             }
         }
     }
@@ -313,7 +298,7 @@ void Network::DFS(vector<Station *> &endStations, Station *srcStation) {
         endStations.push_back(srcStation);
 }
 
-double Network::maxTrainsStation(Station* dest) {
+int Network::maxTrainsStation(Station* dest) {
 
     vector<Station*> endStations;
     for (Station* station : stationsSet)

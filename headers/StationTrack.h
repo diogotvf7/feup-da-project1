@@ -51,7 +51,7 @@ public:
     [[nodiscard]] double getDist() const;
     [[nodiscard]] Track *getPath() const;
     [[nodiscard]] std::vector<Track*> getIncoming() const;
-    [[nodiscard]] double getFlow() const;
+    [[nodiscard]] int getFlow() const;
     
     // auxiliary set functions
     void setId(int id);

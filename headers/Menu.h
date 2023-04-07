@@ -24,9 +24,16 @@ public:
     void exercise_3_1();
     void exercise_4_1();
     void exercise_4_2();
-    void manageNetworks();
+    void manageReducedNetworks();
+    void listReducedNetworks();
+    bool createReducedNetwork();
+    bool deleteReducedNetwork();
+    bool renameReducedNetwork();
+    Network *selectReducedNetwork();
     void runTests();
     Station *listStations(Network *nw, const std::string &message, Station *ignore = nullptr);
+
+    bool seeReducedNetworks();
 };
 
 

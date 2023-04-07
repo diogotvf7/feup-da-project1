@@ -29,11 +29,10 @@ public:
     bool createReducedNetwork();
     bool deleteReducedNetwork();
     bool renameReducedNetwork();
-    Network *selectReducedNetwork();
-    void runTests();
-    Station *listStations(Network *nw, const std::string &message, Station *ignore = nullptr);
-
     bool seeReducedNetworks();
+    Network *selectReducedNetwork();
+    bool editReducedNetwork();
+    Station *listStations(std::vector<Station*> stations, const std::string &message, Station *ignoreStation = nullptr);
 };
 
 

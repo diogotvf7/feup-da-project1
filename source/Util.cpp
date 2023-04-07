@@ -39,12 +39,6 @@ namespace Util {
         return true;
     }
 
-    bool isAlpha(const std::string &str) {
-        for (char c : str)
-            if (!isalpha(c) && !isspace(c)) return false;
-        return true;
-    }
-
     std::string center(std::string str, int width) {
         int padding = width - str.size();
         int leftPadding = padding / 2;

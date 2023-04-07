@@ -11,7 +11,7 @@
 using namespace std;
 
 int main () {
-    Network *network = NetworkManager::createGraph("dataset/test-dataset/");
+    Network *network = NetworkManager::createGraph("../dataset/real-dataset/");
     Menu menu(network);
     menu.run();
     return 0;

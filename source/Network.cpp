@@ -233,11 +233,11 @@ pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
     return {maxFlow, ans};
 }
 
-struct{
+struct {
         bool operator() (const pair<string, double>& pair1, const pair<string, double>& pair2) {
             return (pair1.second > pair2.second);
         }
-}customComparator;
+} customComparator;
 
 vector<pair<string, int>> Network::topTransportationNeeds(string location) { // TODO limitar numero de resultados
     vector<pair<string,int>> res;

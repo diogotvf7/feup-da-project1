@@ -26,8 +26,6 @@ namespace Util {
 
     bool isNumerical(const std::string &str);
 
-    bool isAlpha(const std::string &str);
-
     std::string center(std::string str, int width);
 
     std::string capitalizeFirstLetter(const std::string &str);

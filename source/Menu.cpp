@@ -21,8 +21,7 @@ void Menu::run() {
             case 6: exercise_4_1(); input = "0"; break;
             case 7: exercise_4_2(); input = "0"; break;
             case 8: manageReducedNetworks(); input = "0"; break;
-            case 9: runTests(); input = "0"; break;
-            case 10: cout << "hello"; alive = false; break;
+            case 10: alive = false; break;
         }
         Util::cleanTerminal();
     }
@@ -49,7 +48,6 @@ void Menu::mainMenu() {
 
     while (true) {
         cout << "   - OPTION: " << std::flush;
-
         getline(cin >> ws, input);
         if (Util::isNumerical(input) && 1 <= stoi(input) && stoi(input) <= 10) break;
         else cout << "   - INVALID OPTION" << endl;
@@ -57,9 +55,9 @@ void Menu::mainMenu() {
 }
 
 void Menu::exercise_2_1() {
-    Station *choice1 = listStations(network->getStationsSet(), "Choose the source station: ");
+    Station *choice1 = listStations(network->getStations(), "Choose the source station: ");
     if (choice1 == nullptr) return;
-    Station *choice2 = listStations(network->getStationsSet(), "Choose the destination station: ", choice1);
+    Station *choice2 = listStations(network->getStations(), "Choose the destination station: ", choice1);
     if (choice2 == nullptr) return;
     Util::cleanTerminal();
     string message = "From: " + choice1->getName() + " ---> To: " + choice2->getName();
@@ -167,7 +165,7 @@ void Menu::exercise_2_3() {
 }
 
 void Menu::exercise_2_4() {
-    Station *st = listStations(network->getStationsSet(), "Choose a station: ");
+    Station *st = listStations(network->getStations(), "Choose a station: ");
     if (st == nullptr) return;
     int maxFlow = network->maxTrainsStation(st);
     Util::cleanTerminal();
@@ -190,9 +188,9 @@ void Menu::exercise_2_4() {
 }
 
 void Menu::exercise_3_1() {
-    Station *src = listStations(network->getStationsSet(), "Choose the source station: ");
+    Station *src = listStations(network->getStations(), "Choose the source station: ");
     if (src == nullptr) return;
-    Station *dest = listStations(network->getStationsSet(), "Choose the destination station: ", src);
+    Station *dest = listStations(network->getStations(), "Choose the destination station: ", src);
     if (dest == nullptr) return;
     pair<int,int> p = network->edmondsKarpCost(src,dest);
     Util::cleanTerminal();
@@ -203,7 +201,7 @@ void Menu::exercise_3_1() {
          << '|' << string(188, '_') << '|' << endl
          << endl
          << Util::center("The max flow of trains between " + src->getName() + " and " + dest->getName() +  " is: " + to_string(p.first), 190) << endl
-         << Util::center("The cost for the company is: " + to_string(p.second), 190) << endl
+         << Util::center("The minimum cost for the company is: " + to_string(p.second) + "€", 190) << endl
          << endl
          << string(190, '_') << endl
          << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
@@ -220,13 +218,13 @@ void Menu::exercise_3_1() {
 void Menu::exercise_4_1() {
     Network *reducedNetwork = selectReducedNetwork();
     if (reducedNetwork == nullptr) return;
-    Station *src = listStations(reducedNetwork->getStationsSet(), "Choose the source station: ");
+    Station *src = listStations(reducedNetwork->getStations(), "Choose the source station: ");
     if (src == nullptr) return;
-    Station *dest = listStations(reducedNetwork->getStationsSet(), "Choose the destination station: ", src);
+    Station *dest = listStations(reducedNetwork->getStations(), "Choose the destination station: ", src);
     if (dest == nullptr) return;
     Util::cleanTerminal();
     string message = "From: " + src->getName() + " ---> To: " + dest->getName();
-    int result = NetworkManager::maxFlowBetween(network, src, dest);
+    int result = NetworkManager::maxFlowBetween(reducedNetwork, src, dest);
     while (true) {
         cout << string(190, '_') << endl
              << '|' << Util::center("Max flow in reduced connectivity circumstances", 188) << '|' << endl
@@ -299,7 +297,7 @@ void Menu::exercise_4_2() {
     }
 }
 
-void Menu::manageReducedNetworks() { //TODO Edit reduced networks that already exist???
+void Menu::manageReducedNetworks() {
     bool alive = true;
     while (alive) {
         Util::cleanTerminal();
@@ -336,6 +334,9 @@ void Menu::manageReducedNetworks() { //TODO Edit reduced networks that already e
                 alive = editReducedNetwork();
                 break;
             } else if (Util::normalise(input) == "4") {
+                alive = editReducedNetwork();
+                break;
+            } else if (Util::normalise(input) == "5") {
                 alive = seeReducedNetworks();
                 break;
             } else if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
@@ -381,13 +382,13 @@ bool Menu::createReducedNetwork() {
             getline(cin >> ws, input);
             cout << endl;
             if (input == "1") {
-                Station *st = listStations(reducedNetwork->getStationsSet(), "Choose the station to remove: ");
+                Station *st = listStations(reducedNetwork->getStations(), "Choose the station to remove: ");
                 if (st == nullptr) break;
                 reducedNetwork->removeStation(st->getName());
                 break;
             }
             else if (input == "2") {
-                Station *src = listStations(reducedNetwork->getStationsSet(), "Choose the source station: ");
+                Station *src = listStations(reducedNetwork->getStations(), "Choose the source station: ");
                 if (src == nullptr) break;
                 vector<Station*> possibleDestinations;
                 for (Track *track : src->getAdj())
@@ -527,6 +528,7 @@ Network *Menu::selectReducedNetwork() {
 
 bool Menu::editReducedNetwork() {
     Network *selectedNetwork = selectReducedNetwork();
+    if (selectedNetwork == nullptr) return true;
     while (true) {
         Util::cleanTerminal();
         cout << string(190, '_') << endl
@@ -551,12 +553,12 @@ bool Menu::editReducedNetwork() {
             getline(cin >> ws, input);
             cout << endl;
             if (input == "1") {
-                Station *st = listStations(selectedNetwork->getStationsSet(), "Choose the station to remove: ");
+                Station *st = listStations(selectedNetwork->getStations(), "Choose the station to remove: ");
                 if (st == nullptr) break;
                 selectedNetwork->removeStation(st->getName());
                 break;
             } else if (input == "2") {
-                Station *src = listStations(selectedNetwork->getStationsSet(), "Choose the source station: ");
+                Station *src = listStations(selectedNetwork->getStations(), "Choose the source station: ");
                 if (src == nullptr) break;
                 vector<Station *> possibleDestinations;
                 for (Track *track: src->getAdj())

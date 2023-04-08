@@ -35,7 +35,7 @@ namespace NetworkManager {
 
     vector<Station*> topAffectedStations(Network *normalNetwork, Network *reducedNetwork, int n) {
         unordered_map<string, double> realMaxFlow, reducedMaxFlow, diff;
-        vector<Station*> res, stationSet = normalNetwork->getStationsSet(), reducedStationSet = reducedNetwork->getStationsSet();
+        vector<Station*> res, stationSet = normalNetwork->getStations(), reducedStationSet = reducedNetwork->getStations();
         double cases = (double) (pow(normalNetwork->getNumStations(), 2) - normalNetwork->getNumStations()) / 2 +
                 (pow(reducedNetwork->getNumStations(), 2) - reducedNetwork->getNumStations()) / 2;
         double calculatedCases = 0;

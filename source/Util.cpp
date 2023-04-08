@@ -39,8 +39,8 @@ namespace Util {
         return true;
     }
 
-    std::string center(std::string str, int width) {
-        int padding = width - str.size();
+    std::string center(const std::string &str, int width) {
+        int padding = width - (int) str.size();
         int leftPadding = padding / 2;
         int rightPadding = padding - leftPadding;
         return std::string(leftPadding, ' ') + str + std::string(rightPadding, ' ');
@@ -114,8 +114,8 @@ namespace Util {
             getline(tmp, capacity, ',');
             getline(tmp, service, '\n');
 
-            graph->addBidirectionalTrack(strip(src), strip(dest), stoi(capacity),
-                                         capitalizeFirstLetter(strip(service)));
+            graph->addTrack(strip(src), strip(dest), stoi(capacity),
+                            capitalizeFirstLetter(strip(service)));
         }
     }
 }

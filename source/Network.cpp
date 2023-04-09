@@ -2,53 +2,31 @@
 
 using namespace std;
 
-int Network::setStationsSet(std::vector<Station*> newStationsSet){
-    stationsSet = newStationsSet;
-    return 0;
-}
-
-
 Station* Network::findStation(const string &stationName) const {
-    for (Station* station : stationsSet)
+    for (Station* station : stations)
         if (station->getName() == stationName)
             return station;
     return nullptr;
 }
 
-bool Network::addStation(Station* station) {
-    if (findStation(station->getName()) == nullptr) {
-        stationsSet.push_back(station);
-        return true;
-    }
-    return false;
+void Network::addStation(Station *station) {
+    if (findStation(station->getName()) == nullptr)
+        stations.push_back(station);
 }
 
-bool Network::addTrack(const string &source, const string &dest, double capacity, const string &service) {
-    auto v1 = findStation(source);
-    auto v2 = findStation(dest);
-    if (v1 == nullptr || v2 == nullptr)
-        return false;
-    v1->addTrack(v2, capacity, service);
-    return true;
-}
-
-bool Network::addBidirectionalTrack(const string &source, const string &dest, int capacity, const string &service) {
-
+void Network::addTrack(const string &source, const string &dest, int capacity, const string &service) const {
     Station* s1 = findStation(source);
     Station* s2 = findStation(dest);
-    if (s1 == nullptr || s2 == nullptr) return false;
+    if (s1 == nullptr || s2 == nullptr) return;
     Track* t1 = s1->addTrack(s2, capacity, service);
     Track* t2 = s2->addTrack(s1, capacity, service);
-    t1->setReverse(t2);
-    t2->setReverse(t1);
-    return true;
 }
 
-void Network::removeTrack(const std::string src, const std::string dest) {
-    auto srcItr = stationsSet.begin(), destItr = stationsSet.begin();
-    while (srcItr != stationsSet.end() && (*srcItr)->getName() != src) srcItr++;     // Find source station
-    while (destItr != stationsSet.end() && (*destItr)->getName() != dest) destItr++;     // Find source station
-    if (srcItr == stationsSet.end() || destItr == stationsSet.end()) return;                                 // Source or destination station not found
+void Network::removeTrack(const std::string &src, const std::string &dest) {
+    auto srcItr = stations.begin(), destItr = stations.begin();
+    while (srcItr != stations.end() && (*srcItr)->getName() != src) srcItr++;     // Find source station
+    while (destItr != stations.end() && (*destItr)->getName() != dest) destItr++;     // Find source station
+    if (srcItr == stations.end() || destItr == stations.end()) return;                                 // Source or destination station not found
     Station *srcStation = *srcItr;
     Station *destStation = *destItr;
     srcStation->removeOutgoingTrack(dest);
@@ -56,35 +34,24 @@ void Network::removeTrack(const std::string src, const std::string dest) {
 }
 
 void Network::removeStation(const string &name) {
-    auto itr = stationsSet.begin();
-    while (itr != stationsSet.end() && (*itr)->getName() != name) itr++;    // Find station
-    if (itr == stationsSet.end()) return;                                   // Station not found
+    auto itr = stations.begin();
+    while (itr != stations.end() && (*itr)->getName() != name) itr++;    // Find station
+    if (itr == stations.end()) return;                                   // Station not found
     (*itr)->removeIncomingTracks();
     (*itr)->removeOutgoingTracks();
-    stationsSet.erase(itr);                                         // Remove station from set
+    stations.erase(itr);                                         // Remove station from set
 }
-
 
 int Network::getNumStations()  const {
-    return (int) stationsSet.size();
+    return (int) stations.size();
 }
 
-vector<Station*> Network::getStationsSet() const {
-    return stationsSet;
-}
-
-vector<Track*> Network::getTracksSet() const {
-    vector<Track*> tracksSet;
-    for(Station* station : stationsSet) {
-        for(Track* track : station->getAdj()) {
-            tracksSet.push_back(track);
-        }
-    }
-    return tracksSet;
+vector<Station*> Network::getStations() const {
+    return stations;
 }
 
 void Network::testAndVisit(queue<Station *> &q, Track *t, Station *s, double residual) {
-    if(!s->isVisited() && residual > 0) {
+    if (!s->isVisited() && residual > 0) {
         s->setVisited(true);
         s->setPath(t);
         q.push(s);
@@ -92,7 +59,7 @@ void Network::testAndVisit(queue<Station *> &q, Track *t, Station *s, double res
 }
 
 bool Network::findAugmentingPath(Station *source, Station *dest) {
-    for(Station* station : stationsSet) {
+    for (Station* station : stations) {
         if (station->getName() != source->getName())
             station->setVisited(false);
         else
@@ -105,13 +72,10 @@ bool Network::findAugmentingPath(Station *source, Station *dest) {
     while(!q.empty() && !(dest->isVisited())) {
         Station* v = q.front();
         q.pop();
-        for(Track* t : v->getAdj()) {
+        for (Track* t : v->getAdj())
             testAndVisit(q, t, t->getDestination(),  t->getCapacity() - t->getFlow());
-        }
-
-        for(Track* t : v->getIncoming()) {
+        for (Track* t : v->getIncoming())
             testAndVisit(q, t, t->getSource(), t->getFlow());
-        }
     }
     return dest->isVisited();
 }
@@ -134,22 +98,22 @@ int Network::findMinResidualAlongPath(Station *source, Station *dest) {
     return f;
 }
 
-pair<int,int> Network::edmondsKarpCost(Station *stationSource, Station *stationDest) {
+pair<int,int> Network::edmondsKarpCost(Station *src, Station *dest) {
 
     vector<pair<int,int>> all_flowCosts;
 
-    for (Station *station: stationsSet)
+    for (Station *station: stations)
         for (Track *track: station->getAdj())
             track->setFlow(0);
 
-    while (findAugmentingPath(stationSource, stationDest)) {
-        pair<int,int> flowCost = findMinResidualCostAlongPath(stationSource, stationDest);
+    while (findAugmentingPath(src, dest)) {
+        pair<int,int> flowCost = findMinResidualCostAlongPath(src, dest);
         all_flowCosts.push_back(flowCost);
-        augmentFlowAlongPath(stationSource, stationDest, flowCost.first);
+        augmentFlowAlongPath(src, dest, flowCost.first);
     }
 
     std::sort(all_flowCosts.begin(), all_flowCosts.end(),
-              [](pair<int,int> p1,pair<int,int> p2){if (p1.first == p2.first) return p1.second < p2.second; return p1.first > p2.first; });
+              [](pair<int,int> p1,pair<int,int> p2) {if (p1.first == p2.first) return p1.second < p2.second; return p1.first > p2.first; });
     return all_flowCosts.at(0);
 }
 
@@ -192,7 +156,7 @@ void Network::edmondsKarp(Station *source, Station *dest) {
     if (source == nullptr || dest == nullptr || source == dest)
         throw logic_error("Invalid source and/or target vertex");
 
-    for (Station *station: stationsSet)
+    for (Station *station: stations)
         for (Track *track: station->getAdj())
             track->setFlow(0);
 
@@ -202,18 +166,16 @@ void Network::edmondsKarp(Station *source, Station *dest) {
     }
 }
 
-
-
 pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
     vector<pair<string,string>> ans;
     vector<pair<string,string>> analysedCases;
-    double maxFlow = 0, calculatedCases = 0, cases = (double) (stationsSet.size()*(stationsSet.size() - 1))/2;
+    double maxFlow = 0, calculatedCases = 0, cases = (double) (stations.size() * (stations.size() - 1)) / 2;
     int percentage = 0;
 
-    for (size_t i = 0; i != stationsSet.size(); i++) {
-        for (size_t j = i; j != stationsSet.size(); j++) {
-            Station* src = stationsSet[i];
-            Station* dest = stationsSet[j];
+    for (size_t i = 0; i != stations.size(); i++) {
+        for (size_t j = i; j != stations.size(); j++) {
+            Station* src = stations[i];
+            Station* dest = stations[j];
             if (src == dest) continue;
             edmondsKarp(src, dest);
             if (percentage < round(calculatedCases++ / cases * 100)) {
@@ -233,11 +195,11 @@ pair<double,vector<pair<string,string>>> Network::topMaxFlow() {
     return {maxFlow, ans};
 }
 
-struct{
+struct {
         bool operator() (const pair<string, double>& pair1, const pair<string, double>& pair2) {
             return (pair1.second > pair2.second);
         }
-}customComparator;
+} customComparator;
 
 vector<pair<string, int>> Network::topTransportationNeeds(string location) { // TODO limitar numero de resultados
     vector<pair<string,int>> res;
@@ -249,7 +211,7 @@ vector<pair<string, int>> Network::topTransportationNeeds(string location) { // 
         else if (location == "municipality") return station->getMunicipality();
         return string("");
     };
-    for (Station* station : stationsSet) {
+    for (Station* station : stations) {
         string locStr = getLocationString(station);
         auto itr = find_if(res.begin(), res.end(), [&](const auto& p) {
             return p.first == locStr;
@@ -260,10 +222,10 @@ vector<pair<string, int>> Network::topTransportationNeeds(string location) { // 
             res.emplace_back(locStr, 0);
     }
     for (int i = 0; i < getNumStations(); i++) {
-        Station* src = stationsSet[i];
+        Station* src = stations[i];
         string srcLocStr = getLocationString(src);
         for (int j = i; j < getNumStations(); j++) {
-            Station* dest = stationsSet[j];
+            Station* dest = stations[j];
             if (src == dest) continue;
 
             edmondsKarp(src, dest);
@@ -294,24 +256,24 @@ void Network::DFS(vector<Station *> &endStations, Station *srcStation) {
 
     srcStation->setVisited(true);
     bool unvisitedNeighbours = false;
-    for(Track* track : srcStation->getIncoming()){
-        if(!track->getSource()->isVisited()){
+    for (Track* track : srcStation->getIncoming()) {
+        if (!track->getSource()->isVisited()) {
             unvisitedNeighbours = true;
             DFS(endStations, track->getSource());
         }
     }
-    if(!unvisitedNeighbours)
+    if (!unvisitedNeighbours)
         endStations.push_back(srcStation);
 }
 
 int Network::maxTrainsStation(Station* dest) {
 
     vector<Station*> endStations;
-    for (Station* station : stationsSet)
+    for (Station* station : stations)
         station->setVisited(false);
     DFS(endStations, dest);
 
-    Station* superSource = new Station("test", "test", "test", "test", "test");
+    Station *superSource = new Station("test", "test", "test", "test", "test");
 
     for (Station* station : endStations)
         superSource->addTrack(station, INT16_MAX, "REGULAR");

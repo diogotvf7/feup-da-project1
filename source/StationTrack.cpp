@@ -10,10 +10,6 @@ Station::Station(const string &name, const string &district, const string &munic
     this->line = line;
 }
 
-bool Station::operator<(Station *station) const {
-    return this->dist < station->dist;
-}
-
 string Station::getName() const {
     return name;
 }
@@ -34,28 +30,12 @@ string Station::getLine() const {
     return line;
 }
 
-int Station::getId() const {
-    return id;
-}
-
 vector<Track*> Station::getAdj() const {
     return adj;
 }
 
 bool Station::isVisited() const {
     return visited;
-}
-
-bool Station::isProcessing() const {
-    return processing;
-}
-
-unsigned int Station::getIndegree() const {
-    return indegree;
-}
-
-double Station::getDist() const {
-    return dist;
 }
 
 Track *Station::getPath() const {
@@ -68,18 +48,6 @@ vector<Track *> Station::getIncoming() const {
 
 void Station::setVisited(bool visited) {
     this->visited = visited;
-}
-
-void Station::setProcesssing(bool processing) {
-    this->processing = processing;
-}
-
-void Station::setIndegree(unsigned int indegree) {
-    this->indegree = indegree;
-}
-
-void Station::setDist(double dist) {
-    this->dist = dist;
 }
 
 void Station::setPath(Track *path) {
@@ -141,6 +109,7 @@ Track::Track(Station *src, Station *dest, int capacity, const string &service) {
     this->dest = dest;
     this->capacity = capacity;
     this->service = service;
+    flow = 0;
 }
 
 Station *Track::getDestination() const {
@@ -151,16 +120,8 @@ int Track::getCapacity() const {
     return capacity;
 }
 
-bool Track::isSelected() const {
-    return selected;
-}
-
 Station *Track::getSource() const {
     return src;
-}
-
-Track *Track::getReverse() const {
-    return reverse;
 }
 
 int Track::getFlow() const {
@@ -171,19 +132,7 @@ string Track::getService() const {
     return service;
 }
 
-void Track::setSelected(bool selected) {
-    this->selected = selected;
-}
-
-void Track::setReverse(Track *reverse) {
-    this->reverse = reverse;
-}
-
 void Track::setFlow(int flow) {
     this->flow = flow;
-}
-
-void Track::setService(const string &service) {
-    this->service = service;
 }
 

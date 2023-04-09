@@ -531,5 +531,5 @@ Network *Menu::selectReducedNetwork() {
 
 void Menu::runTests() {
     // TODO
-    
+
 }

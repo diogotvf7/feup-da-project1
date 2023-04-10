@@ -215,6 +215,15 @@ void Menu::exercise_3_1() {
     Station *dest = listStations(network->getStations(), "Choose the destination station: ", src);
     if (dest == nullptr) return;
     pair<int,int> p = network->edmondsKarpCost(src,dest);
+    if (p.first == -1 && p.second == -1) { while (true) {
+            cout << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+                    << '|' << string(188, '_') << '|' << endl;
+            cout << "   - OPTION: " << std::flush;
+            getline(cin >> ws, input);
+            cout << endl;
+            if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+            else cout << "   - INVALID OPTION" << endl;
+        } }
     Util::cleanTerminal();
     cout << string(190, '_') << endl
          << '|' << Util::center("Maximum number of arriving trains travelling between", 188) << '|' << endl

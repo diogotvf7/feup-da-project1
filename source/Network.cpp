@@ -111,7 +111,7 @@ pair<int,int> Network::edmondsKarpCost(Station *src, Station *dest) {
         all_flowCosts.push_back(flowCost);
         augmentFlowAlongPath(src, dest, flowCost.first);
     }
-    if (all_flowCosts.empty()) { cout << "No path found." << endl; return {-1,-1};}
+    if (all_flowCosts.empty()) { return {-1,-1};}
     std::sort(all_flowCosts.begin(), all_flowCosts.end(),
               [](pair<int,int> p1,pair<int,int> p2) {if (p1.first == p2.first) return p1.second < p2.second; return p1.first > p2.first; });
     return all_flowCosts.at(0);

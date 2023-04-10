@@ -114,6 +114,7 @@ void Menu::exercise_2_2() {
 
 void Menu::exercise_2_3() {
     string option;
+    int no;
     vector<pair<string, int>> res;
     Util::cleanTerminal();
     cout << string(190, '_') << endl
@@ -142,7 +143,28 @@ void Menu::exercise_2_3() {
         } else if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
         else cout << "   - INVALID OPTION" << endl;
     }
+
+    while(true){
+        cout << string(190, '_') << endl
+             << '|' << Util::center("WRITE THE MAX NUMBER OF STATIONS TO DISPLAY", 188) << '|' << endl
+             << '|' << Util::center("WRITE MENU TO GO TO THE MAIN MENU", 188) << '|' << endl
+             << '|' << string(188, '_') << '|' << endl;
+
+        getline(cin >> ws, input);
+        if(option == "district" && Util::isNumerical(input) && stoi(input) > 0 && stoi(input) <= 18){
+            no = stoi(input);
+            break;
+        }
+        else if(option == "municipality" && Util::isNumerical(input) && stoi(input) > 0 && stoi(input) <= 135){
+            no = stoi(input);
+            break;
+        }
+        else if (Util::normalise(input) == "menu" || Util::normalise(input) == "back") return;
+        else cout << "   - INVALID OPTION" << endl;
+    }
+
     res = network->topTransportationNeeds(option);
+    res.resize(no);
     Util::cleanTerminal();
     cout << string(190, '_') << endl
          << '|' << Util::center("Top transportation needs", 188) << '|' << endl

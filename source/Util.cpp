@@ -7,7 +7,7 @@ namespace Util {
     }
 
     void cleanTerminal() {
-        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+        std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
     }
 
     std::string repeat(const std::string &str, int times) {
@@ -87,26 +87,26 @@ namespace Util {
             if (tmp.peek() == '"') {
                 getline(tmp, township, '"');
                 getline(tmp, township, '"');
-            } else {
+            } else
                 getline(tmp, township, ',');
-            }
             getline(tmp, line, ',');
             getline(tmp, line, '\n');
 
-            graph->addStation(new Station(strip(name), capitalizeFirstLetter(strip(district)),
-                                          capitalizeFirstLetter(strip(municipality)), strip(township),
+            for (Station *station : graph->getStations()) if (station->getName() == strip(name)) continue;
+            graph->addStation(new Station(strip(name),
+                                          capitalizeFirstLetter(strip(district)),
+                                          capitalizeFirstLetter(strip(municipality)),
+                                          strip(township),
                                           capitalizeFirstLetter(strip(line))));
         }
     }
 
     void readNetwork(const std::string &path, Network *graph) {
-
         std::ifstream csv(path + "network.csv");
         std::string buffer;
         getline(csv, buffer, '\n'); // Ignore Header
 
         while (getline(csv, buffer)) {
-
             std::string src, dest, capacity, service;
             std::stringstream tmp(buffer);
             getline(tmp, src, ',');

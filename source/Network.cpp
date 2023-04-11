@@ -113,7 +113,9 @@ pair<int,int> Network::edmondsKarpCost(Station *src, Station *dest) {
     }
     if (all_flowCosts.empty()) { return {-1,-1};}
     std::sort(all_flowCosts.begin(), all_flowCosts.end(),
-              [](pair<int,int> p1,pair<int,int> p2) {if (p1.first == p2.first) return p1.second < p2.second; return p1.first > p2.first; });
+              [](pair<int,int> p1,pair<int,int> p2) {
+        if (p1.first == p2.first) return p1.second < p2.second; return p1.first > p2.first;
+    });
     return all_flowCosts.at(0);
 }
 
@@ -201,7 +203,7 @@ struct {
         }
 } customComparator;
 
-vector<pair<string, int>> Network::topTransportationNeeds(string location) { // TODO limitar numero de resultados
+vector<pair<string,int>> Network::topTransportationNeeds(string location) {
     vector<pair<string,int>> res;
     auto cases = (double) (pow(getNumStations(), 2) - getNumStations()) / 2;
     double calculatedCases = 0;

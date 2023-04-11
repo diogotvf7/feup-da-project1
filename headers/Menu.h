@@ -10,6 +10,7 @@
 #include "Util.h"
 
 class Menu {
+    std::string path;
     Network *network;
     std::unordered_map<std::string, Network*> reducedNetworks;
     std::string input;
@@ -18,7 +19,7 @@ public:
      * @brief Constuctor of the Menu class
      * @param network the main network to be used
      */
-    Menu(Network *network);
+    Menu(Network *network, const std::string &path);
     /**
      * @brief Runs the menu
      */

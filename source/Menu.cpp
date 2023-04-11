@@ -2,7 +2,8 @@
 
 using namespace std;
 
-Menu::Menu(Network *network) {
+Menu::Menu(Network *network, const string &path) {
+    this->path = path;
     this->network = network;
     this->input = "0";
     Util::cleanTerminal();
@@ -413,7 +414,7 @@ void Menu::listReducedNetworks() {
 }
 
 bool Menu::createReducedNetwork() {
-    Network *reducedNetwork = NetworkManager::createGraph("../dataset/real-dataset/");
+    Network *reducedNetwork = NetworkManager::createGraph(path);
     while (true) {
         Util::cleanTerminal();
         cout << string(190, '_') << endl

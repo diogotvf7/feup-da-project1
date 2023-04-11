@@ -137,8 +137,6 @@ std::pair<int,int> Network::findMinResidualCostAlongPath(Station *source, Statio
     return {f,f * cost};
 }
 
-
-
 void Network::augmentFlowAlongPath(Station *source, Station *dest, double f) {
     for (auto v = dest; v != source; ) {
         auto e = v->getPath();

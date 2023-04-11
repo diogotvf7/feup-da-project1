@@ -1,0 +1,16 @@
+Station_A,Station_B,Capacity,Service
+Porto Campanhã,Viana do Castelo,10,STANDARD
+Porto Campanhã,Ermidas-Sado,5,STANDARD
+Porto Campanhã,Faro,15,STANDARD
+Viana do Castelo,Ermidas-Sado,4,ALFA PENDULAR
+Ermidas-Sado,Faro,4,STANDARD
+Viana do Castelo,Funcheira,9,STANDARD
+Viana do Castelo,Lisboa Oriente,15,STANDARD
+Ermidas-Sado,Lisboa Oriente,8,STANDARD
+Faro,Nine,16,STANDARD
+Nine,Ermidas-Sado,6,STANDARD
+Funcheira,Lisboa Oriente,15,STANDARD
+Lisboa Oriente,Nine,15,STANDARD
+Funcheira,Pinhal Novo,10,STANDARD
+Lisboa Oriente,Pinhal Novo,10,STANDARD
+Nine,Pinhal Novo,10,STANDARD

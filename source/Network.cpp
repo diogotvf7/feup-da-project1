@@ -132,9 +132,9 @@ std::pair<int,int> Network::findMinResidualCostAlongPath(Station *source, Statio
             f = min(f, e->getFlow());
             v = e->getDestination();
         }
-        cost += e->getService() == "STANDARD" ? 4 : 2;
+        cost += e->getService() == "Standard" ? 2 : 4;
     }
-    return {f,f*cost};
+    return {f,f * cost};
 }
 
 

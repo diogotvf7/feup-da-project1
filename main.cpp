@@ -5,7 +5,7 @@
 using namespace std;
 
 int main () {
-    Network *network = NetworkManager::createGraph("../dataset/real-dataset/");
+    Network *network = NetworkManager::createGraph("../dataset/test-dataset-2/");
     Menu menu(network);
     menu.run();
     return 0;
